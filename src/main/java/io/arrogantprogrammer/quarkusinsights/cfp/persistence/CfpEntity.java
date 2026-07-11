@@ -11,7 +11,6 @@ import java.util.UUID;
 public class CfpEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private LocalDate cfpOpens;
@@ -38,7 +37,8 @@ public class CfpEntity {
     public CfpEntity() {
     }
 
-    public CfpEntity(LocalDate cfpOpens, LocalDate cfpCloses, String conferenceName, String conferenceUrl, String conferenceDescription, List<FormatEntity> conferenceSessionFormats, List<TrackEntity> tracks, String contactEmailAddress) {
+    public CfpEntity(UUID id, LocalDate cfpOpens, LocalDate cfpCloses, String conferenceName, String conferenceUrl, String conferenceDescription, List<FormatEntity> conferenceSessionFormats, List<TrackEntity> tracks, String contactEmailAddress) {
+        this.id = id;
         this.cfpOpens = cfpOpens;
         this.cfpCloses = cfpCloses;
         this.conferenceName = conferenceName;

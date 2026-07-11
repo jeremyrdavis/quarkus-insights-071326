@@ -20,21 +20,9 @@ public class CfpMapper {
                 cfp.getConferenceName(),
                 cfp.getConferenceUrl(),
                 cfp.getConferenceDescription(),
+                cfp.getTracks(),
+                cfp.getConferenceSessionFormats(),
                 cfp.getContactEmailAddress());
     }
 
-    public static CfpEntity toEntity(Cfp cfp) {
-        if (cfp == null) {
-            return null;
-        }
-        return new CfpEntity(
-                cfp.getCfpOpens(),
-                cfp.getCfpCloses(),
-                cfp.getConferenceName(),
-                cfp.getConferenceUrl(),
-                cfp.getConferenceDescription(),
-                cfp.getConferenceSessionFormats().stream().map(format -> new FormatEntity(format.formatCode(), format.title(), format.description(), format.duration())).collect(Collectors.toList()),
-                cfp.getTracks().stream().map(track -> new TrackEntity(track.trackCode(), track.title(), track.description())).collect(Collectors.toList()),
-                cfp.getContactEmailAddress().address());
-    }
 }

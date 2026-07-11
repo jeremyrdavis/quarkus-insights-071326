@@ -27,6 +27,21 @@ public class Cfp {
 
     private EmailAddress contactEmailAddress;
 
+    public Cfp() {
+    }
+
+    public Cfp(java.util.UUID id, LocalDate cfpOpens, LocalDate cfpCloses, String conferenceName, String conferenceUrl, String conferenceDescription, List<ConferenceSessionFormat> conferenceSessionFormats, List<Track> tracks, EmailAddress contactEmailAddress) {
+        this.id = id;
+        this.cfpOpens = cfpOpens;
+        this.cfpCloses = cfpCloses;
+        this.conferenceName = conferenceName;
+        this.conferenceUrl = conferenceUrl;
+        this.conferenceDescription = conferenceDescription;
+        this.conferenceSessionFormats = conferenceSessionFormats == null ? new java.util.ArrayList<>() : conferenceSessionFormats;
+        this.tracks = tracks == null ? new java.util.ArrayList<>() : tracks;
+        this.contactEmailAddress = contactEmailAddress;
+    }
+
     public static Cfp create(
             LocalDate cfpOpens,
             LocalDate cfpCloses,
@@ -43,8 +58,8 @@ public class Cfp {
         cfp.conferenceName = conferenceName;
         cfp.conferenceUrl = conferenceUrl;
         cfp.conferenceDescription = conferenceDescription;
-        cfp.conferenceSessionFormats = conferenceSessionFormats;
-        cfp.tracks = tracks;
+        cfp.conferenceSessionFormats = conferenceSessionFormats == null ? new java.util.ArrayList<>() : conferenceSessionFormats;
+        cfp.tracks = tracks == null ? new java.util.ArrayList<>() : tracks;
         cfp.contactEmailAddress = contactEmailAddress;
         return cfp;
     }

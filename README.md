@@ -86,5 +86,6 @@ I built most of this project on a car trip listening to the following albums:
 - Phish - _The Gorge '98'_
 - Bruce Springsteen and the E Street Band - _The Legendary 1979 No Nukes Concert_
 - Anonymous 4 - _The Origin of Fire: Music and Visions of Hildegard von Bingen_
+- Fugazi - _Fugazi Live at Metropolitan University Leeds UK 10/31/02_
 
-My trip started in Maine, and New England made me think of Phish.  Springsteen was an obvious choice by the time we hit New Jersey.  I deviated from the pattern in Pennsylvania because it was a new day, and I wanted to listen to Hildegard von Bingen.
+My trip started in Maine, and New England made me think of Phish.  Springsteen was an obvious choice by the time we hit New Jersey.  I deviated from the pattern in Pennsylvania, but returned to it when outside of D.C. with Fugazi.

@@ -6,6 +6,8 @@ import java.util.Collection;
 
 public class ConferenceSession {
 
+    private java.util.UUID id;
+
     private String title;
 
     private String description;
@@ -26,6 +28,23 @@ public class ConferenceSession {
 
     private Collection<ProgrammingLanguage> programmingLanguagesUsed;
 
+    public ConferenceSession() {
+    }
+
+    public ConferenceSession(java.util.UUID id, String title, String description, ConferenceSessionFormat conferenceSessionFormat, Track track, Level level, Language language, Presenter presenter, String preRequisiteKnowledge, String presentationOutline, Collection<ProgrammingLanguage> programmingLanguagesUsed) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.conferenceSessionFormat = conferenceSessionFormat;
+        this.track = track;
+        this.level = level;
+        this.language = language;
+        this.presenter = presenter;
+        this.preRequisiteKnowledge = preRequisiteKnowledge;
+        this.presentationOutline = presentationOutline;
+        this.programmingLanguagesUsed = programmingLanguagesUsed;
+    }
+
     public static ConferenceSession create(
             String title,
             String description,
@@ -38,6 +57,7 @@ public class ConferenceSession {
             String presentationOutline,
             Collection<ProgrammingLanguage> programmingLanguagesUsed) {
         var conferenceSession = new ConferenceSession();
+        conferenceSession.id = java.util.UUID.randomUUID();
         conferenceSession.title = title;
         conferenceSession.description = description;
         conferenceSession.conferenceSessionFormat = conferenceSessionFormat;
@@ -49,6 +69,10 @@ public class ConferenceSession {
         conferenceSession.presentationOutline = presentationOutline;
         conferenceSession.programmingLanguagesUsed = programmingLanguagesUsed;
         return conferenceSession;
+    }
+
+    public java.util.UUID getId() {
+        return id;
     }
 
     public String getTitle() {

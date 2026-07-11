@@ -28,14 +28,13 @@ public class CfpService {
     @Transactional
     public PresenterDTO registerPresenter(CreatePresenterCommand command){
         Presenter presenter = Presenter.create(command.email(), command.firstName(), command.lastName());
-        PresenterEntity presenterEntity = PresenterMapper.toEntity(presenter);
-        presenterRepository.persist(presenterEntity);
-        return PresenterMapper.toDTO(presenter);
+        Presenter persistedPresenter = presenterRepository.register(presenter);
+        return PresenterMapper.toDTO(persistedPresenter);
     }
 
     public PresenterDTO getPresenter(String email) {
         Optional<PresenterEntity> presenterEntity = presenterRepository.findByEmail(email);
-        return presenterEntity.map(entity -> PresenterMapper.toDTO(PresenterMapper.toDomain(entity))).orElse(null);
+        return presenterEntity.map(entity -> PresenterMapper.toDTO(presenterRepository.toDomain(entity))).orElse(null);
     }
 
     @Transactional
@@ -45,7 +44,7 @@ public class CfpService {
             PresenterEntity presenterEntity = presenterEntityOptional.get();
             presenterEntity.setFirstName(parameters.firstName());
             presenterEntity.setLastName(parameters.lastName());
-            return PresenterMapper.toDTO(PresenterMapper.toDomain(presenterEntity));
+            return PresenterMapper.toDTO(presenterRepository.toDomain(presenterEntity));
         }
         return null;
     }
@@ -55,6 +54,7 @@ public class CfpService {
         presenterRepository.delete("email", email);
     }
 
+    @Transactional
     public CfpDTO createCfp(CreateCfpCommand command) {
         Log.debugf("createCfp: {}", command);
         Cfp cfp = Cfp.create(
@@ -66,9 +66,8 @@ public class CfpService {
                 command.conferenceSessionFormats(),
                 command.tracks(),
                 command.contactEmailAddress());
-        CfpEntity cfpEntity = CfpMapper.toEntity(cfp);
-        cfpRepository.persist(cfpEntity);
-        return CfpMapper.toDTO(cfp);
+        Cfp createdCfp = cfpRepository.createCfp(cfp);
+        return CfpMapper.toDTO(createdCfp);
     }
 
     @Transactional

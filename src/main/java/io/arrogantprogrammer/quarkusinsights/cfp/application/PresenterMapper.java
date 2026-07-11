@@ -13,20 +13,4 @@ public class PresenterMapper {
         return new PresenterDTO(presenter.getEmail(), presenter.getFirstName(), presenter.getLastName());
     }
 
-    public static PresenterEntity toEntity(Presenter presenter) {
-        if (presenter == null) {
-            return null;
-        }
-        return new PresenterEntity(presenter.getEmail().address(), presenter.getFirstName(), presenter.getLastName());
-    }
-
-    public static Presenter toDomain(PresenterEntity presenterEntity) {
-        if (presenterEntity == null) {
-            return null;
-        }
-        return Presenter.create(
-                new EmailAddress(presenterEntity.getEmail()),
-                presenterEntity.getFirstName(),
-                presenterEntity.getLastName());
-    }
 }

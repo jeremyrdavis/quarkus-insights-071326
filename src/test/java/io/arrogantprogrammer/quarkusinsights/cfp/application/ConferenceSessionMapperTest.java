@@ -45,6 +45,7 @@ public class ConferenceSessionMapperTest {
         ConferenceSessionEntity entity = mapper.toEntity(session);
 
         assertNotNull(entity);
+        assertEquals(session.getId(), entity.getId());
         assertEquals(session.getTitle(), entity.getTitle());
         assertEquals(session.getDescription(), entity.getDescription());
         assertEquals(session.getFormat().formatCode(), entity.getFormat().getFormatCode());
@@ -53,6 +54,7 @@ public class ConferenceSessionMapperTest {
         assertEquals(session.getTrack().title(), entity.getTrack().getTitle());
         assertEquals(session.getLevel(), entity.getLevel());
         assertEquals(session.getLanguage(), entity.getLanguage());
+        assertEquals(session.getPresenter().getId(), entity.getPresenter().getId());
         assertEquals(session.getPresenter().getEmail().address(), entity.getPresenter().getEmail());
         assertEquals(session.getPresenter().getFirstName(), entity.getPresenter().getFirstName());
         assertEquals(session.getPresenter().getLastName(), entity.getPresenter().getLastName());

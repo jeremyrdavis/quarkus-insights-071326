@@ -12,7 +12,6 @@ import java.util.List;
 public class ConferenceSessionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private java.util.UUID id;
 
     private String title;
@@ -51,7 +50,8 @@ public class ConferenceSessionEntity {
     public ConferenceSessionEntity() {
     }
 
-    public ConferenceSessionEntity(String title, String description, FormatEntity format, TrackEntity track, Level level, Language language, PresenterEntity presenter, String preRequisiteKnowledge, String presentationOutline, List<String> programmingLanguagesUsed) {
+    public ConferenceSessionEntity(java.util.UUID id, String title, String description, FormatEntity format, TrackEntity track, Level level, Language language, PresenterEntity presenter, String preRequisiteKnowledge, String presentationOutline, List<String> programmingLanguagesUsed) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.format = format;

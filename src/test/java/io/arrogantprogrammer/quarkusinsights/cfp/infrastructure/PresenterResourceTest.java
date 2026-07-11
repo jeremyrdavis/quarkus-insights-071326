@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 @QuarkusTest
 public class PresenterResourceTest {
@@ -23,7 +24,8 @@ public class PresenterResourceTest {
                 .post("/presenters/")
                 .then()
                 .statusCode(201)
-                .body("emailAddress.address", is("test@example.com"));
+                .body("emailAddress.address", is("test@example.com"))
+                .body("id", notNullValue());
 
         // Get
         given()

@@ -27,6 +27,7 @@ public class ConferenceSessionMapper {
  
     public static ConferenceSessionEntity toEntity(ConferenceSession conferenceSession) {
         return new ConferenceSessionEntity(
+                conferenceSession.getId(),
                 conferenceSession.getTitle(),
                 conferenceSession.getDescription(),
                 new FormatEntity(
@@ -43,6 +44,7 @@ public class ConferenceSessionMapper {
                 conferenceSession.getLevel(),
                 conferenceSession.getLanguage(),
                 conferenceSession.getPresenter() == null ? null : new PresenterEntity(
+                        conferenceSession.getPresenter().getId(),
                         conferenceSession.getPresenter().getEmail().address(),
                         conferenceSession.getPresenter().getFirstName(),
                         conferenceSession.getPresenter().getLastName()

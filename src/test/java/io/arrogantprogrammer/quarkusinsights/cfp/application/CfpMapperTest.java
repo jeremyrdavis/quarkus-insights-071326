@@ -2,7 +2,6 @@ package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
-import io.arrogantprogrammer.quarkusinsights.cfp.persistence.CfpEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -25,22 +24,23 @@ public class CfpMapperTest {
                 List.of(Track.create(TrackCode.ARCHITECTURE, "Architecture", "Architecture track")),
                 new EmailAddress("info@quarkus.io"));
 
-        CfpEntity entity = CfpMapper.toEntity(cfp);
+        CfpDTO cfpDTO = CfpMapper.toDTO(cfp);
 
-        assertNotNull(entity);
-        assertEquals(cfp.getCfpOpens(), entity.getCfpOpens());
-        assertEquals(cfp.getCfpCloses(), entity.getCfpCloses());
-        assertEquals(cfp.getConferenceName(), entity.getConferenceName());
-        assertEquals(cfp.getConferenceUrl(), entity.getConferenceUrl());
-        assertEquals(cfp.getConferenceDescription(), entity.getConferenceDescription());
-        assertEquals(cfp.getContactEmailAddress().address(), entity.getContactEmailAddress());
+        assertNotNull(cfpDTO);
+        assertNotNull(cfpDTO.id());
+        assertEquals(cfp.getCfpOpens(), cfpDTO.cfpOpens());
+        assertEquals(cfp.getCfpCloses(), cfpDTO.cfpCloses());
+        assertEquals(cfp.getConferenceName(), cfpDTO.conferenceName());
+        assertEquals(cfp.getConferenceUrl(), cfpDTO.conferenceUrl());
+        assertEquals(cfp.getConferenceDescription(), cfpDTO.conferenceDescription());
+        assertEquals(cfp.getContactEmailAddress().address(), cfpDTO.contactEmailAddress().address());
         
-        assertEquals(1, entity.getConferenceSessionFormats().size());
-        assertEquals(FormatCode.TECHNICAL_SESSION, entity.getConferenceSessionFormats().get(0).getFormatCode());
-        assertEquals("Technical Session", entity.getConferenceSessionFormats().get(0).getTitle());
+        assertEquals(1, cfpDTO.conferenceSessionFormats().size());
+        assertEquals(FormatCode.TECHNICAL_SESSION, cfpDTO.conferenceSessionFormats().get(0).formatCode());
+        assertEquals("Technical Session", cfpDTO.conferenceSessionFormats().get(0).title());
         
-        assertEquals(1, entity.getTracks().size());
-        assertEquals(TrackCode.ARCHITECTURE, entity.getTracks().get(0).getTrackCode());
-        assertEquals("Architecture", entity.getTracks().get(0).getTitle());
+        assertEquals(1, cfpDTO.tracks().size());
+        assertEquals(TrackCode.ARCHITECTURE, cfpDTO.tracks().get(0).trackCode());
+        assertEquals("Architecture", cfpDTO.tracks().get(0).title());
     }
 }

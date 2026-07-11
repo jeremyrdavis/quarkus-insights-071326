@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 public class PresenterEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private java.util.UUID id;
 
     private String email;
@@ -19,7 +18,8 @@ public class PresenterEntity {
     public PresenterEntity() {
     }
 
-    public PresenterEntity(String email, String firstName, String lastName) {
+    public PresenterEntity(java.util.UUID id, String email, String firstName, String lastName) {
+        this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
