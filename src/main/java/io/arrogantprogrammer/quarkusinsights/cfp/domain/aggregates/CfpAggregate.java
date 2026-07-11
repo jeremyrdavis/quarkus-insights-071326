@@ -1,6 +1,4 @@
-package io.arrogantprogrammer.quarkusinsights.cfp.domain;
-
-import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpDTO;
+package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 
 import java.time.LocalDate;
 
@@ -30,9 +28,5 @@ public class CfpAggregate {
 
     public LocalDate getCfpCloses() {
         return cfpCloses;
-    }
-
-    public CfpDTO toDTO() {
-        return new CfpDTO(this.cfpOpens, this.cfpCloses);
     }
 }

@@ -5,6 +5,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,5 +49,18 @@ public class CfpServiceTest {
         assertEquals(1, result.programmingLanguagesUsed().size());
         assertEquals(java, result.programmingLanguagesUsed().iterator().next());
         assertEquals("Basic Java knowledge", result.preRequisiteKnowledge());
+    }
+
+    @Test
+    public void testCreateCfp() {
+        LocalDate opens = LocalDate.of(2026, 1, 1);
+        LocalDate closes = LocalDate.of(2026, 1, 31);
+        CreateCfpCommand command = new CreateCfpCommand(opens, closes);
+
+        CfpDTO result = cfpService.createCfp(command);
+
+        assertNotNull(result);
+        assertEquals(opens, result.cfpOpens());
+        assertEquals(closes, result.cfpCloses());
     }
 }

@@ -6,11 +6,16 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
+
 @Path("/presenters")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class PresenterResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PresenterResource.class);
@@ -26,8 +31,8 @@ public class PresenterResource {
                 parameters.firstName(),
                 parameters.lastName()
         );
-        var submitterDTO = cfpService.registerPresenter(createPresenterCommand);
-        return Response.ok().entity(submitterDTO).build();
+        var presenterDTO = cfpService.registerPresenter(createPresenterCommand);
+        return Response.created(URI.create("/" + presenterDTO.emailAddress())).entity(presenterDTO).build();
     }
 
     @GET

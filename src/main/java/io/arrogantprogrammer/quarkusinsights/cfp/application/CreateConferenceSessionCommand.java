@@ -26,6 +26,7 @@ public record CreateConferenceSessionCommand(
         Objects.requireNonNull(presenterEmail, "presenterEmail is required");
         Objects.requireNonNull(presentationOutline, "presentationOutline is required");
         Objects.requireNonNull(programmingLanguagesUsed, "programmingLanguagesUsed is required");
+
         if (programmingLanguagesUsed.isEmpty()) {
             throw new IllegalArgumentException("At least one programming language is required");
         }

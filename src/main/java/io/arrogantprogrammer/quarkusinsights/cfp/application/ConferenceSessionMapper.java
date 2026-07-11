@@ -1,6 +1,6 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSession;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.ConferenceSessionEntity;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.FormatEntity;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.PresenterEntity;
@@ -18,7 +18,7 @@ public class ConferenceSessionMapper {
                 conferenceSession.getTrack(),
                 conferenceSession.getLevel(),
                 conferenceSession.getLanguage(),
-                conferenceSession.getPresenter() == null ? null : conferenceSession.getPresenter().toDTO(),
+                PresenterMapper.toDTO(conferenceSession.getPresenter()),
                 conferenceSession.getPresentationOutline(),
                 conferenceSession.getProgrammingLanguagesUsed(),
                 conferenceSession.getPreRequisiteKnowledge()
@@ -42,7 +42,7 @@ public class ConferenceSessionMapper {
                 ),
                 conferenceSession.getLevel(),
                 conferenceSession.getLanguage(),
-                new PresenterEntity(
+                conferenceSession.getPresenter() == null ? null : new PresenterEntity(
                         conferenceSession.getPresenter().getEmail().address(),
                         conferenceSession.getPresenter().getFirstName(),
                         conferenceSession.getPresenter().getLastName()

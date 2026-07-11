@@ -1,8 +1,8 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.CfpAggregate;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSession;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.Presenter;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.CfpAggregate;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
 import io.arrogantprogrammer.quarkusinsights.cfp.infrastructure.PresenterParameters;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.ConferenceSessionEntity;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.ConferenceSessionRepository;
@@ -20,7 +20,7 @@ public class CfpService {
 
     public PresenterDTO registerPresenter(CreatePresenterCommand command){
         Presenter presenter = Presenter.create().withEmail(command.email()).withFirstName(command.firstName()).withLastName(command.lastName());
-        return presenter.toDTO();
+        return PresenterMapper.toDTO(presenter);
     }
 
     public PresenterDTO getPresenter(String email) {
@@ -37,8 +37,7 @@ public class CfpService {
 
     public CfpDTO createCfp(CreateCfpCommand command) {
         CfpAggregate cfpAggregate = CfpAggregate.create().withCfpOpens(command.cfpOpens()).withCfpCloses(command.cfpCloses());
-        CfpDTO cfpDTO = cfpAggregate.toDTO();
-        return cfpDTO;
+        return CfpMapper.toDTO(cfpAggregate);
     }
 
     @Transactional

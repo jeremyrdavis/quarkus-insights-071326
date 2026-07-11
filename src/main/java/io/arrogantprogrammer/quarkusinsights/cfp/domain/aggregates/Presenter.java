@@ -1,6 +1,6 @@
-package io.arrogantprogrammer.quarkusinsights.cfp.domain;
+package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.application.PresenterDTO;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 
 public class Presenter {
 
@@ -39,7 +39,4 @@ public class Presenter {
         return lastName;
     }
 
-    public PresenterDTO toDTO() {
-        return new PresenterDTO(email, firstName, lastName);
-    }
 }

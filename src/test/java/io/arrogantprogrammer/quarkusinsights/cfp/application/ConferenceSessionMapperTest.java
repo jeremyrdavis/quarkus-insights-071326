@@ -1,6 +1,8 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.ConferenceSessionEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,7 @@ public class ConferenceSessionMapperTest {
         assertEquals(session.getTrack(), dto.track());
         assertEquals(session.getLevel(), dto.level());
         assertEquals(session.getLanguage(), dto.language());
-        assertEquals(session.getPresenter().toDTO(), dto.presenter());
+        assertEquals(PresenterMapper.toDTO(session.getPresenter()), dto.presenter());
         assertEquals(session.getPresentationOutline(), dto.presentationOutline());
         assertEquals(session.getProgrammingLanguagesUsed(), dto.programmingLanguagesUsed());
         assertEquals(session.getPreRequisiteKnowledge(), dto.preRequisiteKnowledge());

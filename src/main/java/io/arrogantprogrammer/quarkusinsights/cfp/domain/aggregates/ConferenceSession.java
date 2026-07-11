@@ -1,30 +1,30 @@
-package io.arrogantprogrammer.quarkusinsights.cfp.domain;
+package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.application.ConferenceSessionDTO;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 
 import java.util.Collection;
 
 public class ConferenceSession {
 
-    String title;
+    private String title;
 
-    String description;
+    private String description;
 
-    Format format;
+    private Format format;
 
-    Track track;
+    private Track track;
 
-    Level level;
+    private Level level;
 
-    Language language;
-    
-    Presenter presenter;
+    private Language language;
 
-    String preRequisiteKnowledge;
+    private Presenter presenter;
 
-    String presentationOutline;
+    private String preRequisiteKnowledge;
 
-    Collection<ProgrammingLanguage> programmingLanguagesUsed;
+    private String presentationOutline;
+
+    private Collection<ProgrammingLanguage> programmingLanguagesUsed;
 
     public static ConferenceSession create() {
         return new ConferenceSession();
