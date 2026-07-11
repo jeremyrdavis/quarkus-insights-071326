@@ -1,0 +1,81 @@
+package io.arrogantprogrammer.quarkusinsights.cfp.application;
+
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
+import io.arrogantprogrammer.quarkusinsights.cfp.persistence.ConferenceSessionEntity;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+public class ConferenceSessionMapperTest {
+
+    private ConferenceSessionMapper mapper;
+
+    @BeforeEach
+    public void setUp() {
+        mapper = new ConferenceSessionMapper();
+    }
+
+    @Test
+    public void testToDTO() {
+        ConferenceSession session = createTestSession();
+        ConferenceSessionDTO dto = mapper.toDTO(session);
+
+        assertNotNull(dto);
+        assertEquals(session.getTitle(), dto.title());
+        assertEquals(session.getDescription(), dto.description());
+        assertEquals(session.getFormat(), dto.format());
+        assertEquals(session.getTrack(), dto.track());
+        assertEquals(session.getLevel(), dto.level());
+        assertEquals(session.getLanguage(), dto.language());
+        assertEquals(session.getPresenter().toDTO(), dto.presenter());
+        assertEquals(session.getPresentationOutline(), dto.presentationOutline());
+        assertEquals(session.getProgrammingLanguagesUsed(), dto.programmingLanguagesUsed());
+        assertEquals(session.getPreRequisiteKnowledge(), dto.preRequisiteKnowledge());
+    }
+
+    @Test
+    public void testToEntity() {
+        ConferenceSession session = createTestSession();
+        ConferenceSessionEntity entity = mapper.toEntity(session);
+
+        assertNotNull(entity);
+        assertEquals(session.getTitle(), entity.getTitle());
+        assertEquals(session.getDescription(), entity.getDescription());
+        assertEquals(session.getFormat().formatCode(), entity.getFormat().getFormatCode());
+        assertEquals(session.getFormat().title(), entity.getFormat().getTitle());
+        assertEquals(session.getTrack().trackCode(), entity.getTrack().getTrackCode());
+        assertEquals(session.getTrack().title(), entity.getTrack().getTitle());
+        assertEquals(session.getLevel(), entity.getLevel());
+        assertEquals(session.getLanguage(), entity.getLanguage());
+        assertEquals(session.getPresenter().getEmail().address(), entity.getPresenter().getEmail());
+        assertEquals(session.getPresenter().getFirstName(), entity.getPresenter().getFirstName());
+        assertEquals(session.getPresenter().getLastName(), entity.getPresenter().getLastName());
+        assertEquals(session.getPreRequisiteKnowledge(), entity.getPreRequisiteKnowledge());
+        assertEquals(session.getPresentationOutline(), entity.getPresentationOutline());
+        assertEquals(1, entity.getProgrammingLanguagesUsed().size());
+        assertEquals("Java", entity.getProgrammingLanguagesUsed().get(0));
+    }
+
+    private ConferenceSession createTestSession() {
+        Presenter presenter = Presenter.create()
+                .withEmail(new EmailAddress("steve@example.com"))
+                .withFirstName("Steve")
+                .withLastName("Jobs");
+        
+        return ConferenceSession.create()
+                .withTitle("Mapping Sessions")
+                .withAbstractText("Abstract")
+                .withFormat(Format.create(FormatCode.TECHNICAL_SESSION, "Technical", "Description"))
+                .withTrack(Track.create(TrackCode.ARCHITECTURE, "Arch", "Desc"))
+                .withLevel(Level.BEGINNER)
+                .withLanguage(Language.ENGLISH)
+                .withSubmitterAggregate(presenter)
+                .withPreRequisiteKnowledge("None")
+                .withPresentationOutline("Outline")
+                .withProgrammingLanguagesUsed(List.of(new ProgrammingLanguage("Java")));
+    }
+}

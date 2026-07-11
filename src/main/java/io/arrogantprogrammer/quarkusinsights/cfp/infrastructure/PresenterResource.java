@@ -4,17 +4,23 @@ import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpService;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CreatePresenterCommand;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/presenters")
 public class PresenterResource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PresenterResource.class);
 
     @Inject
     CfpService cfpService;
 
     @POST
-    public Response createPresenter(PresenterParameters parameters) {
+    public Response createPresenter(@Valid PresenterParameters parameters) {
+        LOGGER.debug("createPresenter: {}", parameters);
         CreatePresenterCommand createPresenterCommand = new CreatePresenterCommand(
                 new EmailAddress(parameters.email()),
                 parameters.firstName(),
@@ -33,7 +39,8 @@ public class PresenterResource {
 
     @PUT
     @Path("/{email}")
-    public Response updatePresenter(@PathParam("email") String email, PresenterParameters parameters) {
+    public Response updatePresenter(@PathParam("email") String email, @Valid PresenterParameters parameters) {
+        LOGGER.debug("updatePresenter: {}, {}", email, parameters);
         var submitterDTO = cfpService.updatePresenter(email, parameters);
         return Response.ok().entity(submitterDTO).build();
     }
