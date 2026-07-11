@@ -77,6 +77,9 @@ Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
 
+## Invariants (Business Rules)
+- Presenters can submit a maximum of 4 sessions
+
 ## Listening
 
 I built most of this project on a car trip listening to the following albums:

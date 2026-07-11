@@ -15,7 +15,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
  * in ORM, JAX-RS, or Firestore types, and may rely only on its own domain
  * abstractions.
  */
-@AnalyzeClasses(packages = "com.pickweasel", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packages = "io.arrogantprogrammer", importOptions = ImportOption.DoNotIncludeTests.class)
 class DomainPurityArchTest {
 
     @ArchTest

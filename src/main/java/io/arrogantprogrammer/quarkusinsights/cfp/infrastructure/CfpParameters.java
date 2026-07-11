@@ -1,10 +1,19 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.infrastructure;
 
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSessionFormat;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.Track;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 
 record CfpParameters(
         @NotNull(message = "CFP opening date is required") LocalDate cfpOpens,
-        @NotNull(message = "CFP closing date is required") LocalDate cfpCloses) {
+        @NotNull(message = "CFP closing date is required") LocalDate cfpCloses,
+        @NotNull(message = "Conference name is required") String conferenceName,
+        @NotNull(message = "Conference url is required") String conferenceUrl,
+        @NotNull(message = "Conference description is required") String conferenceDescription,
+        @NotNull(message = "Contact email address is required") String contactEmailAddress,
+        List<Track> tracks,
+        @NotNull(message = "At least 1 conference format is required") List<ConferenceSessionFormat> formats) {
 }

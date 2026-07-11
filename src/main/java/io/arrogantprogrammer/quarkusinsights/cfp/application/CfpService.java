@@ -1,6 +1,6 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.CfpAggregate;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
 import io.arrogantprogrammer.quarkusinsights.cfp.infrastructure.PresenterParameters;
@@ -17,6 +17,9 @@ import java.util.Optional;
 public class CfpService {
 
     @Inject
+    CfpRepository cfpRepository;
+
+    @Inject
     ConferenceSessionRepository conferenceSessionRepository;
 
     @Inject
@@ -24,7 +27,7 @@ public class CfpService {
 
     @Transactional
     public PresenterDTO registerPresenter(CreatePresenterCommand command){
-        Presenter presenter = Presenter.create().withEmail(command.email()).withFirstName(command.firstName()).withLastName(command.lastName());
+        Presenter presenter = Presenter.create(command.email(), command.firstName(), command.lastName());
         PresenterEntity presenterEntity = PresenterMapper.toEntity(presenter);
         presenterRepository.persist(presenterEntity);
         return PresenterMapper.toDTO(presenter);
@@ -53,24 +56,36 @@ public class CfpService {
     }
 
     public CfpDTO createCfp(CreateCfpCommand command) {
-        CfpAggregate cfpAggregate = CfpAggregate.create().withCfpOpens(command.cfpOpens()).withCfpCloses(command.cfpCloses());
-        return CfpMapper.toDTO(cfpAggregate);
+        Log.debugf("createCfp: {}", command);
+        Cfp cfp = Cfp.create(
+                command.cfpOpens(),
+                command.cfpCloses(),
+                command.conferenceName(),
+                command.conferenceUrl(),
+                command.conferenceDescription(),
+                command.conferenceSessionFormats(),
+                command.tracks(),
+                command.contactEmailAddress());
+        CfpEntity cfpEntity = CfpMapper.toEntity(cfp);
+        cfpRepository.persist(cfpEntity);
+        return CfpMapper.toDTO(cfp);
     }
 
     @Transactional
     public ConferenceSessionDTO createConferenceSession(CreateConferenceSessionCommand command) {
         Log.debugf("createConferenceSession: {}", command);
 
-        ConferenceSession conferenceSession = ConferenceSession.create()
-                .withTitle(command.title())
-                .withAbstractText(command.description())
-                .withFormat(command.conferenceSessionFormat())
-                .withTrack(command.track())
-                .withLevel(command.level())
-                .withLanguage(command.language())
-                .withPresentationOutline(command.presentationOutline())
-                .withProgrammingLanguagesUsed(command.programmingLanguagesUsed())
-                .withPreRequisiteKnowledge(command.preRequisiteKnowledge());
+        ConferenceSession conferenceSession = ConferenceSession.create(
+                command.title(),
+                command.description(),
+                command.conferenceSessionFormat(),
+                command.track(),
+                command.level(),
+                command.language(),
+                null,
+                command.preRequisiteKnowledge(),
+                command.presentationOutline(),
+                command.programmingLanguagesUsed());
         Log.debugf("createConferenceSession: {}", conferenceSession);
 
         // Persisting the conference session

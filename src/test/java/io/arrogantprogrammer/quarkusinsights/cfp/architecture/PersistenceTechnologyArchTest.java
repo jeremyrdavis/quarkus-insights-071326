@@ -4,33 +4,36 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
 /**
- * Persistence-technology guardrails. PickWeasel persists exclusively via Cloud
- * Firestore; JPA/Hibernate/Panache must never be introduced, and Firestore
- * repository implementations belong in the persistence layer. All HARD.
+ * Persistence-technology guardrails.
+ * The application persists exclusively via JPA/Hibernate/Panache.
+ * All PanacheRepository repository implementations belong in the persistence layer.
+ * All HARD.
  */
-@AnalyzeClasses(packages = "com.pickweasel", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packages = "io.arrogantprogrammer", importOptions = ImportOption.DoNotIncludeTests.class)
 class PersistenceTechnologyArchTest {
 
     @ArchTest
-    static final ArchRule no_jpa_anywhere = noClasses()
-            .should().dependOnClassesThat().resideInAPackage("jakarta.persistence..")
-            .because("PickWeasel persists via Cloud Firestore; JPA/Hibernate must never be introduced");
-
-    @ArchTest
-    static final ArchRule no_panache_anywhere = noClasses()
-            .should().dependOnClassesThat().resideInAnyPackage(
-                    "io.quarkus.hibernate.orm.panache..",
-                    "io.quarkus.hibernate.reactive.panache..")
-            .because("this codebase does not use Panache");
-
-    @ArchTest
-    static final ArchRule firestore_repository_implementations_live_in_persistence = classes()
-            .that().haveSimpleNameStartingWith("Firestore").and().haveSimpleNameEndingWith("Repository")
+    static final ArchRule jpa_annotated_classes_must_reside_in_persistence_package = classes()
+            .that().areAnnotatedWith(Entity.class)
+            .or().areAnnotatedWith(MappedSuperclass.class)
+            .or().areAnnotatedWith(Embeddable.class)
             .should().resideInAPackage("..persistence..")
-            .because("Firestore repository implementations are an infrastructure concern in the persistence layer");
+            .because("JPA entities, mapped superclasses, and embeddables are persistence concerns and must reside in the persistence package");
+
+    @ArchTest
+    static final ArchRule jpa_annotated_classes_only_allow_public_accessors = methods()
+            .that().areDeclaredInClassesThat().areAnnotatedWith(Entity.class)
+            .or().areDeclaredInClassesThat().areAnnotatedWith(MappedSuperclass.class)
+            .or().areDeclaredInClassesThat().areAnnotatedWith(Embeddable.class)
+            .should().bePublic()
+            .because("JPA entities, mapped superclasses, and embeddables should only be accessed via public methods");
 }

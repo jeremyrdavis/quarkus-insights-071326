@@ -8,9 +8,8 @@ import jakarta.persistence.*;
 public class TrackEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "track_seq")
-    @SequenceGenerator(name = "track_seq", sequenceName = "track_sequence")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private java.util.UUID id;
 
     @Enumerated(EnumType.STRING)
     private TrackCode trackCode;
@@ -28,7 +27,7 @@ public class TrackEntity {
         this.description = description;
     }
 
-    public Long getId() {
+    public java.util.UUID getId() {
         return id;
     }
 

@@ -1,5 +1,16 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
-import java.time.LocalDate;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 
-public record CfpDTO(LocalDate cfpOpens, LocalDate cfpCloses) {}
+import java.time.LocalDate;
+import java.util.UUID;
+
+public record CfpDTO(
+        java.util.UUID conferenceId,
+        LocalDate cfpOpens,
+        LocalDate cfpCloses,
+        String conferenceName,
+        String conferenceUrl,
+        String conferenceDescription,
+        EmailAddress contactEmailAddress) {
+}

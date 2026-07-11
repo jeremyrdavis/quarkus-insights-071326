@@ -63,21 +63,18 @@ public class ConferenceSessionMapperTest {
     }
 
     private ConferenceSession createTestSession() {
-        Presenter presenter = Presenter.create()
-                .withEmail(new EmailAddress("steve@example.com"))
-                .withFirstName("Steve")
-                .withLastName("Jobs");
+        Presenter presenter = Presenter.create(new EmailAddress("steve@example.com"), "Steve", "Jobs");
         
-        return ConferenceSession.create()
-                .withTitle("Mapping Sessions")
-                .withAbstractText("Abstract")
-                .withFormat(ConferenceSessionFormat.create(FormatCode.TECHNICAL_SESSION, "Technical", "Description"))
-                .withTrack(Track.create(TrackCode.ARCHITECTURE, "Arch", "Desc"))
-                .withLevel(Level.BEGINNER)
-                .withLanguage(Language.ENGLISH)
-                .withSubmitterAggregate(presenter)
-                .withPreRequisiteKnowledge("None")
-                .withPresentationOutline("Outline")
-                .withProgrammingLanguagesUsed(List.of(new ProgrammingLanguage("Java")));
+        return ConferenceSession.create(
+                "Mapping Sessions",
+                "Abstract",
+                ConferenceSessionFormat.create(FormatCode.TECHNICAL_SESSION, "Technical", "Description"),
+                Track.create(TrackCode.ARCHITECTURE, "Arch", "Desc"),
+                Level.BEGINNER,
+                Language.ENGLISH,
+                presenter,
+                "None",
+                "Outline",
+                List.of(new ProgrammingLanguage("Java")));
     }
 }

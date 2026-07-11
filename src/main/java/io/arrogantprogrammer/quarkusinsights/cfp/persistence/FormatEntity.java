@@ -9,9 +9,8 @@ import java.time.Duration;
 public class FormatEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "format_seq")
-    @SequenceGenerator(name = "format_seq", sequenceName = "format_sequence")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private java.util.UUID id;
 
     @Enumerated(EnumType.STRING)
     private FormatCode formatCode;
@@ -32,7 +31,7 @@ public class FormatEntity {
         this.duration = duration;
     }
 
-    public Long getId() {
+    public java.util.UUID getId() {
         return id;
     }
 

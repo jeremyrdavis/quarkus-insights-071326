@@ -11,6 +11,7 @@ import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 
+import org.eclipse.microprofile.config.ConfigProvider;
 import java.util.Set;
 
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
@@ -36,16 +37,16 @@ import static com.tngtech.archunit.library.freeze.FreezingArchRule.freeze;
  * all contexts. Both rules are frozen so current coupling is baselined while new
  * coupling fails.
  */
-@AnalyzeClasses(packages = "com.pickweasel", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packages = "io.arrogantprogrammer", importOptions = ImportOption.DoNotIncludeTests.class)
 class BoundedContextArchTest {
 
-    private static final String BASE = "com.pickweasel.";
+    private static final String BASE = ConfigProvider.getConfig().getValue("base-package", String.class) + ".";
     private static final Set<String> CROSS_CUTTING = Set.of("shared", "security", "admin", "discovery");
 
     /** Cross-cutting modules are intentional hubs/aggregators, not bounded contexts. */
     private static final DescribedPredicate<JavaClass> IN_CROSS_CUTTING = resideInAnyPackage(
-            "com.pickweasel.shared..", "com.pickweasel.admin..",
-            "com.pickweasel.security..", "com.pickweasel.discovery..");
+            BASE + "shared..", BASE + "admin..",
+            BASE + "security..", BASE + "discovery..");
 
     /**
      * Published domain events are each context's outbound published language
@@ -56,11 +57,11 @@ class BoundedContextArchTest {
      * would read as a cycle.
      */
     private static final DescribedPredicate<JavaClass> IN_PUBLISHED_EVENTS =
-            resideInAnyPackage("com.pickweasel..domain.events..");
+            resideInAnyPackage(BASE + ".*.domain.events..");
 
     @ArchTest
     static final ArchRule contexts_are_free_of_cycles = freeze(
-            slices().matching("com.pickweasel.(*)..").should().beFreeOfCycles()
+            slices().matching(BASE + "(*)..").should().beFreeOfCycles()
                     .ignoreDependency(IN_CROSS_CUTTING, DescribedPredicate.alwaysTrue())
                     .ignoreDependency(DescribedPredicate.alwaysTrue(), IN_CROSS_CUTTING)
                     .ignoreDependency(DescribedPredicate.alwaysTrue(), IN_PUBLISHED_EVENTS));
@@ -107,7 +108,7 @@ class BoundedContextArchTest {
                 || targetPackage.contains(".domain.events.");
     }
 
-    /** First package segment under com.pickweasel, e.g. {@code connection}, {@code sports}, {@code user}. */
+    /** First package segment under the base package, e.g. {@code connection}, {@code sports}, {@code user}. */
     private static String contextOf(JavaClass javaClass) {
         String packageName = javaClass.getPackageName();
         if (!packageName.startsWith(BASE)) {

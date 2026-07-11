@@ -24,9 +24,9 @@ public class PresenterMapper {
         if (presenterEntity == null) {
             return null;
         }
-        return Presenter.create()
-                .withEmail(new EmailAddress(presenterEntity.getEmail()))
-                .withFirstName(presenterEntity.getFirstName())
-                .withLastName(presenterEntity.getLastName());
+        return Presenter.create(
+                new EmailAddress(presenterEntity.getEmail()),
+                presenterEntity.getFirstName(),
+                presenterEntity.getLastName());
     }
 }

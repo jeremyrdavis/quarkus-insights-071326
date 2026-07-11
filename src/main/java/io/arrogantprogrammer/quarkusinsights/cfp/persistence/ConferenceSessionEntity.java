@@ -12,9 +12,8 @@ import java.util.List;
 public class ConferenceSessionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "conf_sess_seq")
-    @SequenceGenerator(name = "conf_sess_seq", sequenceName = "conference_session_sequence")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private java.util.UUID id;
 
     private String title;
 
@@ -65,7 +64,7 @@ public class ConferenceSessionEntity {
         this.programmingLanguagesUsed = programmingLanguagesUsed;
     }
 
-    public Long getId() {
+    public java.util.UUID getId() {
         return id;
     }
 

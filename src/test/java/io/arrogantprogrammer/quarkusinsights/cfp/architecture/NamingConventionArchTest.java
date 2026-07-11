@@ -4,6 +4,7 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
@@ -20,21 +21,23 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
  * per-context {@code infrastructure} layout, so it is an accepted location for
  * its {@code *Endpoint} and {@code *DTO} types. All HARD.
  */
-@AnalyzeClasses(packages = "com.pickweasel", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packages = "io.arrogantprogrammer", importOptions = ImportOption.DoNotIncludeTests.class)
 class NamingConventionArchTest {
+
+    private static final String ADMIN_PACKAGE = ConfigProvider.getConfig().getValue("base-package", String.class) + ".admin..";
 
     @ArchTest
     static final ArchRule jaxrs_resources_are_endpoints_in_infrastructure = classes()
             .that().areAnnotatedWith("jakarta.ws.rs.Path").and().areNotInterfaces()
-            .should().haveSimpleNameEndingWith("Endpoint")
-            .andShould().resideInAnyPackage("..infrastructure..", "com.pickweasel.admin..")
-            .because("JAX-RS server resources follow the *Endpoint convention in the infrastructure layer (or the admin aggregator)");
+            .should().haveSimpleNameEndingWith("Resource")
+            .andShould().resideInAnyPackage("..infrastructure..", ADMIN_PACKAGE)
+            .because("JAX-RS server resources follow the *Resource convention in the infrastructure layer (or the admin aggregator)");
 
     @ArchTest
     static final ArchRule dtos_live_in_infrastructure = classes()
             .that().haveSimpleNameEndingWith("DTO")
-            .should().resideInAnyPackage("..infrastructure..", "com.pickweasel.admin..")
-            .because("DTOs are an infrastructure/transport concern in this codebase (or the admin aggregator)");
+            .should().resideInAnyPackage("..application..", ADMIN_PACKAGE)
+            .because("DTOs are an application/transport concern in this codebase (or the admin aggregator)");
 
     @ArchTest
     static final ArchRule exception_mappers_are_providers_in_infrastructure = classes()

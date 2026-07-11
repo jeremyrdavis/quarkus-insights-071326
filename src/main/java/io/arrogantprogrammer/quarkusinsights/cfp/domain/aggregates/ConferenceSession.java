@@ -26,58 +26,29 @@ public class ConferenceSession {
 
     private Collection<ProgrammingLanguage> programmingLanguagesUsed;
 
-    public static ConferenceSession create() {
-        return new ConferenceSession();
-    }
-
-    public ConferenceSession withTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public ConferenceSession withAbstractText(String abstractText) {
-        this.description = abstractText;
-        return this;
-    }
-
-    public ConferenceSession withSubmitterAggregate(Presenter presenter) {
-        this.presenter = presenter;
-        return this;
-    }
-
-    public ConferenceSession withFormat(ConferenceSessionFormat conferenceSessionFormat) {
-        this.conferenceSessionFormat = conferenceSessionFormat;
-        return this;
-    }
-
-    public ConferenceSession withTrack(Track track) {
-        this.track = track;
-        return this;
-    }
-
-    public ConferenceSession withLevel(Level level) {
-        this.level = level;
-        return this;
-    }
-
-    public ConferenceSession withLanguage(Language language) {
-        this.language = language;
-        return this;
-    }
-
-    public ConferenceSession withPreRequisiteKnowledge(String preRequisiteKnowledge) {
-        this.preRequisiteKnowledge = preRequisiteKnowledge;
-        return this;
-    }
-
-    public ConferenceSession withPresentationOutline(String presentationOutline) {
-        this.presentationOutline = presentationOutline;
-        return this;
-    }
-
-    public ConferenceSession withProgrammingLanguagesUsed(Collection<ProgrammingLanguage> programmingLanguagesUsed) {
-        this.programmingLanguagesUsed = programmingLanguagesUsed;
-        return this;
+    public static ConferenceSession create(
+            String title,
+            String description,
+            ConferenceSessionFormat conferenceSessionFormat,
+            Track track,
+            Level level,
+            Language language,
+            Presenter presenter,
+            String preRequisiteKnowledge,
+            String presentationOutline,
+            Collection<ProgrammingLanguage> programmingLanguagesUsed) {
+        var conferenceSession = new ConferenceSession();
+        conferenceSession.title = title;
+        conferenceSession.description = description;
+        conferenceSession.conferenceSessionFormat = conferenceSessionFormat;
+        conferenceSession.track = track;
+        conferenceSession.level = level;
+        conferenceSession.language = language;
+        conferenceSession.presenter = presenter;
+        conferenceSession.preRequisiteKnowledge = preRequisiteKnowledge;
+        conferenceSession.presentationOutline = presentationOutline;
+        conferenceSession.programmingLanguagesUsed = programmingLanguagesUsed;
+        return conferenceSession;
     }
 
     public String getTitle() {

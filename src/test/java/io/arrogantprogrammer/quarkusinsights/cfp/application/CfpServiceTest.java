@@ -55,12 +55,25 @@ public class CfpServiceTest {
     public void testCreateCfp() {
         LocalDate opens = LocalDate.of(2026, 1, 1);
         LocalDate closes = LocalDate.of(2026, 1, 31);
-        CreateCfpCommand command = new CreateCfpCommand(opens, closes);
+        EmailAddress email = new EmailAddress("test@example.com");
+        CreateCfpCommand command = new CreateCfpCommand(
+                opens,
+                closes,
+                "Test Conference",
+                "https://testconf.com",
+                "A test conference",
+                null,
+                null,
+                email);
 
         CfpDTO result = cfpService.createCfp(command);
 
         assertNotNull(result);
         assertEquals(opens, result.cfpOpens());
         assertEquals(closes, result.cfpCloses());
+        assertEquals("Test Conference", result.conferenceName());
+        assertEquals("https://testconf.com", result.conferenceUrl());
+        assertEquals("A test conference", result.conferenceDescription());
+        assertEquals(email, result.contactEmailAddress());
     }
 }

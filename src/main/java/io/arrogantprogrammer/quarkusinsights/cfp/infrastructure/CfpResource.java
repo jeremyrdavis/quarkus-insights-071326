@@ -1,7 +1,9 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.infrastructure;
 
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpService;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CreateCfpCommand;
+import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.POST;
@@ -10,22 +12,28 @@ import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URI;
+
 @Path("/cfp")
 public class CfpResource {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CfpResource.class);
 
     @Inject
     CfpService cfpService;
 
     @POST
     public Response createCfp(@Valid CfpParameters parameters){
-        LOGGER.debug("createCfp: {}", parameters);
+        Log.debugf("createCfp: {}", parameters);
         CreateCfpCommand createCfpCommand = new CreateCfpCommand(
                 parameters.cfpOpens(),
-                parameters.cfpCloses()
+                parameters.cfpCloses(),
+                parameters.conferenceName(),
+                parameters.conferenceUrl(),
+                parameters.conferenceDescription(),
+                parameters.formats(),
+                parameters.tracks(),
+                new EmailAddress(parameters.contactEmailAddress())
         );
         var cfpDTO = cfpService.createCfp(createCfpCommand);
-        return Response.ok().entity(cfpDTO).build();
+        return Response.created(URI.create("/" + cfpDTO.conferenceId())).entity(cfpDTO).build();
     }
 }

@@ -13,7 +13,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
  * no setters and no non-final instance state. Operations that "modify" a value
  * return a new instance. All HARD.
  */
-@AnalyzeClasses(packages = "com.pickweasel", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packages = "io.arrogantprogrammer", importOptions = ImportOption.DoNotIncludeTests.class)
 class ValueObjectArchTest {
 
     @ArchTest

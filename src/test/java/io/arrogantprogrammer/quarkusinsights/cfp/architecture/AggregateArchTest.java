@@ -16,7 +16,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noMethods;
  * methods, never through public mutable state or setters. JPA/Panache absence is
  * enforced globally by {@link PersistenceTechnologyArchTest}. All HARD.
  */
-@AnalyzeClasses(packages = "io.arrogantprogrammer.quarkusinsights.cfp", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packages = "io.arrogantprogrammer", importOptions = ImportOption.DoNotIncludeTests.class)
 class AggregateArchTest {
 
     @ArchTest

@@ -4,6 +4,7 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
@@ -15,10 +16,10 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
  * fixture, not a domain event, and correctly lives under {@code valueobjects}.)
  * All HARD.
  */
-@AnalyzeClasses(packages = "com.pickweasel", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packages = "io.arrogantprogrammer", importOptions = ImportOption.DoNotIncludeTests.class)
 class DomainEventArchTest {
 
-    private static final String DOMAIN_EVENT = "com.pickweasel.shared.domain.DomainEvent";
+    private static final String DOMAIN_EVENT = ConfigProvider.getConfig().getValue("base-package", String.class) + ".shared.domain.DomainEvent";
 
     @ArchTest
     static final ArchRule domain_events_reside_in_events_packages = classes()

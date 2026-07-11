@@ -1,9 +1,6 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSessionFormat;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.FormatCode;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.Track;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.TrackCode;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -12,6 +9,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CfpTest {
+
+    static final EmailAddress CONTACT_EMAIL = new EmailAddress("info@nljug.org");
 
     static final List<Track> ALL_TRACKS = List.of(
             Track.create(TrackCode.JAVA_LANGUAGE, "Java Language", "All things Java language and runtime."),
@@ -28,20 +27,22 @@ public class CfpTest {
     @Test
     public void testCfpCreation() {
 
-        CfpAggregate cfp = CfpAggregate.create()
-                .withConferenceName("J-Fall 2026")
-                .withConferenceUrl("https://j-fall.nl")
-                .withConferenceDescription("The biggest Java conference in the Netherlands.")
-                .withCfpOpens(LocalDate.of(2026, 7, 13))
-                .withCfpCloses(LocalDate.of(2026, 8, 13))
-                .withFormats(ALL_CONFERENCE_SESSION_FORMATS)
-                .withTracks(ALL_TRACKS);
+        Cfp cfp = Cfp.create(
+                LocalDate.of(2026, 7, 13),
+                LocalDate.of(2026, 8, 13),
+                "J-Fall 2026",
+                "https://j-fall.nl",
+                "The biggest Java conference in the Netherlands.",
+                ALL_CONFERENCE_SESSION_FORMATS,
+                ALL_TRACKS,
+                CONTACT_EMAIL);
 
         assertEquals("J-Fall 2026", cfp.getConferenceName());
         assertEquals("https://j-fall.nl", cfp.getConferenceUrl());
         assertEquals("The biggest Java conference in the Netherlands.", cfp.getConferenceDescription());
         assertEquals(LocalDate.of(2026, 7, 13), cfp.getCfpOpens());
         assertEquals(LocalDate.of(2026, 8, 13), cfp.getCfpCloses());
+        assertEquals(CONTACT_EMAIL, cfp.getContactEmailAddress());
     }
 
 

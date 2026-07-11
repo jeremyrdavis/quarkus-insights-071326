@@ -7,9 +7,8 @@ import jakarta.persistence.*;
 public class PresenterEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "presenter_seq")
-    @SequenceGenerator(name = "presenter_seq", sequenceName = "presenter_sequence")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private java.util.UUID id;
 
     private String email;
 
@@ -26,7 +25,7 @@ public class PresenterEntity {
         this.lastName = lastName;
     }
 
-    public Long getId() {
+    public java.util.UUID getId() {
         return id;
     }
 

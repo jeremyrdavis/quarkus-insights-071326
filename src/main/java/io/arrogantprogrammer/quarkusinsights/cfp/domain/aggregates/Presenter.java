@@ -8,23 +8,12 @@ public class Presenter {
     private String firstName;
     private String lastName;
 
-    public static Presenter create() {
-        return new Presenter();
-    }
-
-    public Presenter withEmail(EmailAddress email) {
-        this.email = email;
-        return this;
-    }
-
-    public Presenter withFirstName(String firstName) {
-        this.firstName = firstName;
-        return this;
-    }
-
-    public Presenter withLastName(String lastName) {
-        this.lastName = lastName;
-        return this;
+    public static Presenter create(EmailAddress email, String firstName, String lastName) {
+        Presenter presenter = new Presenter();
+        presenter.email = email;
+        presenter.firstName = firstName;
+        presenter.lastName = lastName;
+        return presenter;
     }
 
     public EmailAddress getEmail() {

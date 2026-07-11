@@ -4,6 +4,7 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import org.eclipse.microprofile.config.ConfigProvider;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
@@ -15,8 +16,10 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
  * {@code *DomainService} (stateless domain logic, in {@code domain}); a bare
  * {@code *Service} is the layer-confusion smell.
  */
-@AnalyzeClasses(packages = "com.pickweasel", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packages = "io.arrogantprogrammer", importOptions = ImportOption.DoNotIncludeTests.class)
 class ServiceArchTest {
+
+    private static final String ADMIN_PACKAGE = ConfigProvider.getConfig().getValue("base-package", String.class) + ".admin..";
 
     @ArchTest
     static final ArchRule services_declare_their_layer_in_their_name = classes()
@@ -29,7 +32,7 @@ class ServiceArchTest {
     @ArchTest
     static final ArchRule application_services_live_in_application = classes()
             .that().haveSimpleNameEndingWith("ApplicationService").and().areNotInterfaces()
-            .should().resideInAnyPackage("..application..", "com.pickweasel.admin..")
+            .should().resideInAnyPackage("..application..", ADMIN_PACKAGE)
             .as("application services should reside in the application package (or the admin aggregator)")
             .allowEmptyShould(true);
 
