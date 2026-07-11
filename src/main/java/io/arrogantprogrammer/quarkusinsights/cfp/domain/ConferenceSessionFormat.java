@@ -3,13 +3,13 @@ package io.arrogantprogrammer.quarkusinsights.cfp.domain;
 import java.time.Duration;
 import java.util.Objects;
 
-public record Format(
+public record ConferenceSessionFormat(
         FormatCode formatCode,
         String title,
         String description,
         Duration duration) {
 
-    public static Format create(FormatCode formatCode, String title, String description) {
+    public static ConferenceSessionFormat create(FormatCode formatCode, String title, String description) {
         Objects.requireNonNull(title, "Title cannot be null");
         Objects.requireNonNull(description, "Description cannot be null");
         Objects.requireNonNull(formatCode, "Format code cannot be null");
@@ -27,6 +27,6 @@ public record Format(
         } else {
             duration = Duration.ofMinutes(50);
         }
-        return new Format(formatCode, title, description, duration);
+        return new ConferenceSessionFormat(formatCode, title, description, duration);
     }
 }

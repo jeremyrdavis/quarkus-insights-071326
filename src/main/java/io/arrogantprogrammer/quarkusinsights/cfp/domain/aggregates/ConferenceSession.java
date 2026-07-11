@@ -10,7 +10,7 @@ public class ConferenceSession {
 
     private String description;
 
-    private Format format;
+    private ConferenceSessionFormat conferenceSessionFormat;
 
     private Track track;
 
@@ -45,8 +45,8 @@ public class ConferenceSession {
         return this;
     }
 
-    public ConferenceSession withFormat(Format format) {
-        this.format = format;
+    public ConferenceSession withFormat(ConferenceSessionFormat conferenceSessionFormat) {
+        this.conferenceSessionFormat = conferenceSessionFormat;
         return this;
     }
 
@@ -88,8 +88,8 @@ public class ConferenceSession {
         return description;
     }
 
-    public Format getFormat() {
-        return format;
+    public ConferenceSessionFormat getFormat() {
+        return conferenceSessionFormat;
     }
 
     public Track getTrack() {

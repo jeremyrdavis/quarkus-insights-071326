@@ -39,6 +39,9 @@ public class PresenterResource {
     @Path("/{email}")
     public Response getPresenter(@PathParam("email") String email) {
         var submitterDTO = cfpService.getPresenter(email);
+        if (submitterDTO == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
         return Response.ok().entity(submitterDTO).build();
     }
 

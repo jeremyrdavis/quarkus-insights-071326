@@ -10,8 +10,6 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Path("/conference-sessions")
 public class ConferenceSessionResource {
@@ -25,7 +23,7 @@ public class ConferenceSessionResource {
         CreateConferenceSessionCommand createConferenceSessionCommand = new CreateConferenceSessionCommand(
                 parameters.title(),
                 parameters.description(),
-                parameters.format(),
+                parameters.conferenceSessionFormat(),
                 parameters.track(),
                 parameters.level(),
                 parameters.language(),

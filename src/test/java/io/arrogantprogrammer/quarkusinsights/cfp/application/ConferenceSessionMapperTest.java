@@ -29,7 +29,7 @@ public class ConferenceSessionMapperTest {
         assertNotNull(dto);
         assertEquals(session.getTitle(), dto.title());
         assertEquals(session.getDescription(), dto.description());
-        assertEquals(session.getFormat(), dto.format());
+        assertEquals(session.getFormat(), dto.conferenceSessionFormat());
         assertEquals(session.getTrack(), dto.track());
         assertEquals(session.getLevel(), dto.level());
         assertEquals(session.getLanguage(), dto.language());
@@ -71,7 +71,7 @@ public class ConferenceSessionMapperTest {
         return ConferenceSession.create()
                 .withTitle("Mapping Sessions")
                 .withAbstractText("Abstract")
-                .withFormat(Format.create(FormatCode.TECHNICAL_SESSION, "Technical", "Description"))
+                .withFormat(ConferenceSessionFormat.create(FormatCode.TECHNICAL_SESSION, "Technical", "Description"))
                 .withTrack(Track.create(TrackCode.ARCHITECTURE, "Arch", "Desc"))
                 .withLevel(Level.BEGINNER)
                 .withLanguage(Language.ENGLISH)

@@ -8,7 +8,7 @@ import java.util.Collection;
 public record ConferenceSessionParameters(
         @NotBlank(message = "Title is required") String title,
         @NotBlank(message = "Description is required") String description,
-        @NotNull(message = "Format is required") Format format,
+        @NotNull(message = "Format is required") ConferenceSessionFormat conferenceSessionFormat,
         @NotNull(message = "Track is required") Track track,
         @NotNull(message = "Level is required") Level level,
         @NotNull(message = "Language is required") Language language,

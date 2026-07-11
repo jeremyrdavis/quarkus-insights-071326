@@ -7,7 +7,7 @@ import java.util.Collection;
 public record ConferenceSessionDTO(
         String title,
         String description,
-        Format format,
+        ConferenceSessionFormat conferenceSessionFormat,
         Track track,
         Level level,
         Language language,

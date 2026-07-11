@@ -7,7 +7,7 @@ import java.util.Objects;
 public record CreateConferenceSessionCommand(
         String title,
         String description,
-        Format format,
+        ConferenceSessionFormat conferenceSessionFormat,
         Track track,
         Level level,
         Language language,
@@ -19,7 +19,7 @@ public record CreateConferenceSessionCommand(
     public CreateConferenceSessionCommand {
         Objects.requireNonNull(title, "title is required");
         Objects.requireNonNull(description, "description is required");
-        Objects.requireNonNull(format, "format is required");
+        Objects.requireNonNull(conferenceSessionFormat, "format is required");
         Objects.requireNonNull(track, "track is required");
         Objects.requireNonNull(level, "level is required");
         Objects.requireNonNull(language, "language is required");
