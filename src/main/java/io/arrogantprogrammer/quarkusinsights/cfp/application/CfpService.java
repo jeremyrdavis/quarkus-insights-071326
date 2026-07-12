@@ -1,5 +1,7 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.SubmissionContext;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.SubmissionProposalService;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
@@ -24,6 +26,9 @@ public class CfpService {
 
     @Inject
     PresenterRepository presenterRepository;
+
+    @Inject
+    SubmissionProposalService submissionProposalService;
 
     @Transactional
     public PresenterDTO registerPresenter(CreatePresenterCommand command){
@@ -57,6 +62,7 @@ public class CfpService {
     @Transactional
     public CfpDTO createCfp(CreateCfpCommand command) {
         Log.debugf("createCfp: {}", command);
+        SubmissionContext submissionContext = submissionProposalService.getSubmissionContext(command.cfpId(), null);
         Cfp cfp = Cfp.create(
                 command.cfpOpens(),
                 command.cfpCloses(),

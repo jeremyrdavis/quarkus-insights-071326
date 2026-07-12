@@ -56,6 +56,11 @@ public class ConferenceSession {
             String preRequisiteKnowledge,
             String presentationOutline,
             Collection<ProgrammingLanguage> programmingLanguagesUsed) {
+        /*
+        TODO:
+        Check date
+        Check the number of exisiting submissions for this presenter
+         */
         var conferenceSession = new ConferenceSession();
         conferenceSession.id = java.util.UUID.randomUUID();
         conferenceSession.title = title;

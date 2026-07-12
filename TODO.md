@@ -13,3 +13,7 @@
 
 ## general
 - Add UUIDs to created objects, return a 201 Created response with the location of the created object
+
+## validation
+- Validity check for emails
+-- where to check if email already exists? A: Domain Service

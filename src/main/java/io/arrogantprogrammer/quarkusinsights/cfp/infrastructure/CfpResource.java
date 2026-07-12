@@ -1,7 +1,5 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.infrastructure;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSessionFormat;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceTrack;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpService;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CreateCfpCommand;
@@ -13,7 +11,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 
 import java.net.URI;
-import java.util.stream.Collectors;
 
 @Path("/cfp")
 public class CfpResource {
@@ -25,6 +22,7 @@ public class CfpResource {
     public Response createCfp(@Valid CfpParameters parameters){
         Log.debugf("createCfp: {}", parameters);
         CreateCfpCommand createCfpCommand = new CreateCfpCommand(
+                parameters.cfpId(),
                 parameters.cfpOpens(),
                 parameters.cfpCloses(),
                 parameters.conferenceName(),

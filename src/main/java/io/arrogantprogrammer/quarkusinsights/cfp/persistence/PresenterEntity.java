@@ -1,6 +1,8 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.persistence;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "presenter")
@@ -9,10 +11,13 @@ public class PresenterEntity {
     @Id
     private java.util.UUID id;
 
+    @Email
     private String email;
 
+    @NotNull
     private String firstName;
 
+    @NotNull
     private String lastName;
 
     public PresenterEntity() {

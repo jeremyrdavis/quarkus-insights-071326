@@ -6,8 +6,10 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 record CfpParameters(
+        @NotNull(message = "CFP ID is required") UUID cfpId,
         @NotNull(message = "CFP opening date is required") LocalDate cfpOpens,
         @NotNull(message = "CFP closing date is required") LocalDate cfpCloses,
         @NotNull(message = "Conference name is required") String conferenceName,

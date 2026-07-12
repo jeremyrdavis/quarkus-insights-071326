@@ -65,7 +65,7 @@ public class CfpServiceTest {
                 "A test conference",
                 List.of(new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session", Duration.ofMinutes(50))),
                 null,
-                email);
+                email, );
 
         CfpDTO result = cfpService.createCfp(command);
 

@@ -5,9 +5,11 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceTrack;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -19,7 +21,14 @@ public class CfpRepository implements PanacheRepository<CfpEntity> {
         persist(cfpEntity);
         return toDomain(cfpEntity);
     }
-    
+
+    public Cfp findByUUID(UUID cfpId) {
+        CfpEntity cfpEntity = (CfpEntity) find("id = ?1", cfpId);
+        Log.debugf("Found CFP with id %s", cfpId);
+        return toDomain(cfpEntity);
+    }
+
+
     private CfpEntity toEntity(Cfp cfp) {
         return new CfpEntity(
                 cfp.getId(),
@@ -55,4 +64,5 @@ public class CfpRepository implements PanacheRepository<CfpEntity> {
                 new EmailAddress(cfpEntity.getContactEmailAddress())
         );
     }
+
 }
