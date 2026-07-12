@@ -19,12 +19,12 @@ public class CfpResourceTest {
                 "conferenceDescription": "A comprehensive test conference for software developers",
                 "contactEmailAddress": "cfp@testconf.example.com",
                 "conferenceTracks": [
-                    {"name": "Architecture", "description": "System design and architecture"},
-                    {"name": "Cloud Native", "description": "Cloud-native technologies"}
+                    {"trackCode": "ARCHITECTURE", "title": "Architecture", "description": "System design and architecture"},
+                    {"trackCode": "CLOUD", "title": "Cloud Native", "description": "Cloud-native technologies"}
                 ],
                 "formats": [
-                    {"name": "Talk", "duration": 45},
-                    {"name": "Workshop", "duration": 180}
+                    {"formatCode": "TECHNICAL_SESSION", "title": "Talk", "description": "A standard talk", "duration": "PT45M"},
+                    {"formatCode": "HANDS_ON_LAB", "title": "Workshop", "description": "A hands-on workshop", "duration": "PT3H"}
                 ]
             }
             """;

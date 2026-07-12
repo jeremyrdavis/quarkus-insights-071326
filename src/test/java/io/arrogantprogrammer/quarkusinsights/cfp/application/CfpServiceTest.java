@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,16 +17,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class CfpServiceTest {
 
     @Inject
-    CfpService cfpService;
+    CfpApplicationService cfpService;
 
     @Test
     public void testCreateConferenceSession() {
+        // CFP 44444444 is open Jul–Sep 2026; use it so ConferenceSession.create() doesn't reject the submission
+        UUID cfpId = UUID.fromString("44444444-4444-4444-4444-444444444444");
         EmailAddress email = new EmailAddress("test@example.com");
         ProgrammingLanguage java = new ProgrammingLanguage("Java");
         ConferenceSessionFormat conferenceSessionFormat = new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session", Duration.ofMinutes(50));
         ConferenceTrack conferenceTrack = new ConferenceTrack("ARCHITECTURE", "Architecture", "Architecture track");
 
         CreateConferenceSessionCommand command = new CreateConferenceSessionCommand(
+                cfpId,
                 "Quarkus Insights",
                 "A session about Quarkus",
                 conferenceSessionFormat,
@@ -35,7 +39,7 @@ public class CfpServiceTest {
                 email,
                 "1. Intro, 2. Demo, 3. Q&A",
                 List.of(java),
-                "Basic Java knowledge", );
+                "Basic Java knowledge");
 
         ConferenceSessionDTO result = cfpService.createConferenceSession(command);
 
@@ -65,7 +69,7 @@ public class CfpServiceTest {
                 "A test conference",
                 List.of(new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session", Duration.ofMinutes(50))),
                 null,
-                email, );
+                email);
 
         CfpDTO result = cfpService.createCfp(command);
 

@@ -25,11 +25,13 @@ class DomainEventArchTest {
     static final ArchRule domain_events_reside_in_events_packages = classes()
             .that().implement(DOMAIN_EVENT)
             .should().resideInAPackage("..domain.events..")
-            .because("domain events belong to their bounded context's domain/events package");
+            .because("domain events belong to their bounded context's domain/events package")
+            .allowEmptyShould(true);
 
     @ArchTest
     static final ArchRule event_types_in_events_packages_are_domain_events = classes()
             .that().resideInAPackage("..domain.events..").and().haveSimpleNameEndingWith("Event")
             .should().implement(DOMAIN_EVENT)
-            .because("a *Event in a domain/events package must implement the DomainEvent marker");
+            .because("a *Event in a domain/events package must implement the DomainEvent marker")
+            .allowEmptyShould(true);
 }

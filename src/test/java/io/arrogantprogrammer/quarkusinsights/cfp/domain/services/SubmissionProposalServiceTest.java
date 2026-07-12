@@ -8,7 +8,7 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.Language;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.Level;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ProgrammingLanguage;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.SubmissionContext;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.SubmissionProposalService;
+import io.arrogantprogrammer.quarkusinsights.cfp.application.SubmissionProposalApplicationService;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.TrackCode;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,12 +47,12 @@ public class SubmissionProposalServiceTest {
             Duration.ofMinutes(50));
 
     private static final ConferenceTrack SERVER_SIDE_JAVA_TRACK = new ConferenceTrack(
-            TrackCode.SERVER_SIDE_JAVA,
+            "SERVER_SIDE_JAVA",
             "Server Side Java",
             "Sessions about server side Java");
 
     @Inject
-    SubmissionProposalService submissionProposalService;
+    SubmissionProposalApplicationService submissionProposalService;
 
     @InjectMock
     CfpRepository cfpRepository;
@@ -71,7 +72,7 @@ public class SubmissionProposalServiceTest {
                 List.of(TECHNICAL_SESSION_FORMAT),
                 List.of(SERVER_SIDE_JAVA_TRACK),
                 new EmailAddress("cfp@quarkusinsights.io"));
-        when(cfpRepository.findByUUID(CFP_ID)).thenReturn(cfp);
+        when(cfpRepository.findByUUID(CFP_ID)).thenReturn(Optional.of(cfp));
 
         Presenter presenter = new Presenter(
                 PRESENTER_ID,

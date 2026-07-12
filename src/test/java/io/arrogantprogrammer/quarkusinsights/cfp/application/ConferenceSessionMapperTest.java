@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,7 +50,7 @@ public class ConferenceSessionMapperTest {
         assertEquals(session.getId(), entity.getId());
         assertEquals(session.getTitle(), entity.getTitle());
         assertEquals(session.getDescription(), entity.getDescription());
-        assertEquals(session.getFormat().formatCode(), entity.getFormat().getFormatCode());
+        assertEquals(session.getFormat().formatCode().name(), entity.getFormat().getFormatCode());
         assertEquals(session.getFormat().title(), entity.getFormat().getTitle());
         assertEquals(session.getTrack().trackCode(), entity.getTrack().getTrackCode());
         assertEquals(session.getTrack().title(), entity.getTrack().getTitle());
@@ -67,12 +68,21 @@ public class ConferenceSessionMapperTest {
 
     private ConferenceSession createTestSession() {
         Presenter presenter = Presenter.create(new EmailAddress("steve@example.com"), "Steve", "Jobs");
-        
+        ConferenceSessionFormat format = new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical", "Description", Duration.ofMinutes(50));
+        ConferenceTrack track = new ConferenceTrack("ARCHITECTURE", "Arch", "Desc");
+        SubmissionContext context = new SubmissionContext(
+                LocalDate.now().minusDays(1),
+                LocalDate.now().plusDays(30),
+                List.of(format),
+                List.of(track),
+                List.of());
+
         return ConferenceSession.create(
+                context,
                 "Mapping Sessions",
                 "Abstract",
-                new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical", "Description", Duration.ofMinutes(50)),
-                new ConferenceTrack(TrackCode.ARCHITECTURE, "Arch", "Desc"),
+                format,
+                track,
                 Level.BEGINNER,
                 Language.ENGLISH,
                 presenter,

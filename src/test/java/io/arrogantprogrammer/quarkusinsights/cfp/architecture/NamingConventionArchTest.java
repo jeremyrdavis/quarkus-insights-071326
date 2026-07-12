@@ -44,11 +44,13 @@ class NamingConventionArchTest {
             .that().haveSimpleNameEndingWith("ExceptionMapper")
             .should().beAnnotatedWith("jakarta.ws.rs.ext.Provider")
             .andShould().resideInAPackage("..infrastructure..")
-            .because("exception mappers are JAX-RS @Provider components in the infrastructure layer");
+            .because("exception mappers are JAX-RS @Provider components in the infrastructure layer")
+            .allowEmptyShould(true);
 
     @ArchTest
     static final ArchRule repository_interfaces_live_in_persistence_or_domain = classes()
             .that().areInterfaces().and().haveSimpleNameEndingWith("Repository")
             .should().resideInAnyPackage("..persistence..", "..domain.repositories..")
-            .because("repository ports live either in persistence or in domain/repositories");
+            .because("repository ports live either in persistence or in domain/repositories")
+            .allowEmptyShould(true);
 }

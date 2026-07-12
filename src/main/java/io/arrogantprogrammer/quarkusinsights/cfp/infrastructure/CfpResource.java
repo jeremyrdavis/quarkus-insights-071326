@@ -1,6 +1,6 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.infrastructure;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpService;
+import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpApplicationService;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CreateCfpCommand;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.UpdateCfpCommand;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
@@ -18,13 +18,12 @@ import java.util.UUID;
 public class CfpResource {
 
     @Inject
-    CfpService cfpService;
+    CfpApplicationService cfpService;
 
     @POST
     public Response createCfp(@Valid CfpParameters parameters) {
         Log.debugf("createCfp: {}", parameters);
         CreateCfpCommand createCfpCommand = new CreateCfpCommand(
-                parameters.cfpId(),
                 parameters.cfpOpens(),
                 parameters.cfpCloses(),
                 parameters.conferenceName(),

@@ -10,7 +10,7 @@ public class PresenterMapper {
         if (presenter == null) {
             return null;
         }
-        return new PresenterDTO(presenter.getEmail(), presenter.getFirstName(), presenter.getLastName());
+        return new PresenterDTO(presenter.getId(), presenter.getEmail(), presenter.getFirstName(), presenter.getLastName());
     }
 
 }

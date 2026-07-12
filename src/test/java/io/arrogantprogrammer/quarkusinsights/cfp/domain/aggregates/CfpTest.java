@@ -14,9 +14,9 @@ public class CfpTest {
     static final EmailAddress CONTACT_EMAIL = new EmailAddress("info@nljug.org");
 
     static final List<ConferenceTrack> ALL_CONFERENCE_TRACKS = List.of(
-            ConferenceTrack.create(TrackCode.JAVA_LANGUAGE, "Java Language", "All things Java language and runtime."),
-            ConferenceTrack.create(TrackCode.CLOUD, "Cloud", "Cloud native development, Kubernetes, and serverless."),
-            ConferenceTrack.create(TrackCode.DATA_AI, "Data & AI", "Data engineering, machine learning, and artificial intelligence.")
+            ConferenceTrack.create("JAVA_LANGUAGE", "Java Language", "All things Java language and runtime."),
+            ConferenceTrack.create("CLOUD", "Cloud", "Cloud native development, Kubernetes, and serverless."),
+            ConferenceTrack.create("DATA_AI", "Data & AI", "Data engineering, machine learning, and artificial intelligence.")
     );
 
     static final List<ConferenceSessionFormat> ALL_CONFERENCE_SESSION_FORMATS = List.of(

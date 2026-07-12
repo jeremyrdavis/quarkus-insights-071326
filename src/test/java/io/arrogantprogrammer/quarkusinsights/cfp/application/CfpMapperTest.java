@@ -22,7 +22,7 @@ public class CfpMapperTest {
                 "https://quarkus.io",
                 "Conference about Quarkus",
                 List.of(new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A session about technology", Duration.ofMinutes(50))),
-                List.of(new ConferenceTrack(TrackCode.ARCHITECTURE, "Architecture", "Architecture track")),
+                List.of(new ConferenceTrack("ARCHITECTURE", "Architecture", "Architecture track")),
                 new EmailAddress("info@quarkus.io"));
 
         CfpDTO cfpDTO = CfpMapper.toDTO(cfp);
@@ -41,7 +41,7 @@ public class CfpMapperTest {
         assertEquals("Technical Session", cfpDTO.conferenceSessionFormats().get(0).title());
         
         assertEquals(1, cfpDTO.conferenceTracks().size());
-        assertEquals(TrackCode.ARCHITECTURE, cfpDTO.conferenceTracks().get(0).trackCode());
+        assertEquals("ARCHITECTURE", cfpDTO.conferenceTracks().get(0).trackCode());
         assertEquals("Architecture", cfpDTO.conferenceTracks().get(0).title());
     }
 }

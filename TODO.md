@@ -15,5 +15,5 @@
 - Add UUIDs to created objects, return a 201 Created response with the location of the created object
 
 ## validation
-- Validity check for emails
+- Validity check for emails: a domain service that calls the PresenterRepository to see if an email already exists
 -- where to check if email already exists? A: Domain Service

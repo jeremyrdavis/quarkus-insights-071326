@@ -1,6 +1,6 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.infrastructure;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpService;
+import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpApplicationService;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CreatePresenterCommand;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import jakarta.inject.Inject;
@@ -21,7 +21,7 @@ public class PresenterResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(PresenterResource.class);
 
     @Inject
-    CfpService cfpService;
+    CfpApplicationService cfpService;
 
     @POST
     public Response createPresenter(@Valid PresenterParameters parameters) {

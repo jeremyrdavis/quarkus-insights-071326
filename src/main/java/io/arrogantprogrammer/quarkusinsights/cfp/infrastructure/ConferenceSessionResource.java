@@ -1,6 +1,6 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.infrastructure;
 
-import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpService;
+import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpApplicationService;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.ConferenceSessionDTO;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CreateConferenceSessionCommand;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
@@ -15,7 +15,7 @@ import jakarta.ws.rs.core.Response;
 public class ConferenceSessionResource {
 
     @Inject
-    CfpService cfpService;
+    CfpApplicationService cfpService;
 
     @POST
     public Response createConferenceSession(@Valid ConferenceSessionParameters parameters) {

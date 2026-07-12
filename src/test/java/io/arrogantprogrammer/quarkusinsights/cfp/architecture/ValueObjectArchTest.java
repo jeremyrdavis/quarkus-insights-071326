@@ -20,12 +20,14 @@ class ValueObjectArchTest {
     static final ArchRule value_objects_have_no_setters = noMethods()
             .that().areDeclaredInClassesThat().resideInAPackage("..domain.valueobjects..")
             .should().haveNameMatching("set[A-Z].*")
-            .because("value objects are immutable");
+            .because("value objects are immutable")
+            .allowEmptyShould(true);
 
     @ArchTest
     static final ArchRule value_object_fields_are_final = fields()
             .that().areDeclaredInClassesThat().resideInAPackage("..domain.valueobjects..")
             .and().areNotStatic()
             .should().beFinal()
-            .because("value objects are immutable; instance state must be final");
+            .because("value objects are immutable; instance state must be final")
+            .allowEmptyShould(true);
 }

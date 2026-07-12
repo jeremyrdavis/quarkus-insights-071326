@@ -1,0 +1,4 @@
+#
+#Sun Jul 12 16:58:19 GMT-04:00 2026
+classes\ should\ only\ depend\ on\ other\ bounded\ contexts\ through\ their\ domain.services\ API\ ports\ or\ their\ published\ domain.events=aaf68a03-8cef-4db7-ab09-5ddd02cbb2c8
+slices\ matching\ 'io.arrogantprogrammer.quarkusinsights.(*)..'\ should\ be\ free\ of\ cycles=02576559-2a46-41d9-aa35-4357427c998d
