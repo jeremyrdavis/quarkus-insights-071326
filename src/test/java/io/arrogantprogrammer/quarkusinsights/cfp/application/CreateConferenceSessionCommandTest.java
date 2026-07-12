@@ -3,6 +3,7 @@ package io.arrogantprogrammer.quarkusinsights.cfp.application;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class CreateConferenceSessionCommandTest {
     public void testValidation() {
         EmailAddress email = new EmailAddress("test@example.com");
         ProgrammingLanguage java = new ProgrammingLanguage("Java");
-        ConferenceSessionFormat conferenceSessionFormat = ConferenceSessionFormat.create(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session");
-        ConferenceTrack conferenceTrack = ConferenceTrack.create(TrackCode.ARCHITECTURE, "Architecture", "Architecture track");
+        ConferenceSessionFormat conferenceSessionFormat = new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session", Duration.ofMinutes(50));
+        ConferenceTrack conferenceTrack = new ConferenceTrack(TrackCode.ARCHITECTURE, "Architecture", "Architecture track");
 
         // Test null values (Objects.requireNonNull throws NullPointerException)
         assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand(null, "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", List.of(java), null));

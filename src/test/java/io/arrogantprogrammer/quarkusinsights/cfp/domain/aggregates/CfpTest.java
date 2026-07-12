@@ -3,6 +3,7 @@ package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,9 +20,9 @@ public class CfpTest {
     );
 
     static final List<ConferenceSessionFormat> ALL_CONFERENCE_SESSION_FORMATS = List.of(
-            ConferenceSessionFormat.create(FormatCode.TECHNICAL_SESSION, "Technical session", "A 50-minute presentation-style session featuring in-depth technical content."),
-            ConferenceSessionFormat.create(FormatCode.HANDS_ON_LAB, "Hands-on lab (HOL)", "A 120-minute session with self-guided lab instructions for participants who bring their own laptops to experiment with a specific technology. Typically includes one or more instructors for support and troubleshooting."),
-            ConferenceSessionFormat.create(FormatCode.KEYNOTE, "Keynote", "A 25-minute keynote delivered to the entire J-Fall audience, typically featuring visionary or thought-leadership content.")
+            new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical session", "A 50-minute presentation-style session featuring in-depth technical content.", Duration.ofMinutes(50)),
+            new ConferenceSessionFormat(FormatCode.HANDS_ON_LAB, "Hands-on lab (HOL)", "A 120-minute session with self-guided lab instructions for participants who bring their own laptops to experiment with a specific technology. Typically includes one or more instructors for support and troubleshooting.", Duration.ofMinutes(120)),
+            new ConferenceSessionFormat(FormatCode.KEYNOTE, "Keynote", "A 25-minute keynote delivered to the entire J-Fall audience, typically featuring visionary or thought-leadership content.", Duration.ofMinutes(25))
     );
 
     @Test

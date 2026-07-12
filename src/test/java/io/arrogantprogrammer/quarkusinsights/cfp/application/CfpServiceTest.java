@@ -5,6 +5,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class CfpServiceTest {
     public void testCreateConferenceSession() {
         EmailAddress email = new EmailAddress("test@example.com");
         ProgrammingLanguage java = new ProgrammingLanguage("Java");
-        ConferenceSessionFormat conferenceSessionFormat = ConferenceSessionFormat.create(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session");
-        ConferenceTrack conferenceTrack = ConferenceTrack.create(TrackCode.ARCHITECTURE, "Architecture", "Architecture track");
+        ConferenceSessionFormat conferenceSessionFormat = new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session", Duration.ofMinutes(50));
+        ConferenceTrack conferenceTrack = new ConferenceTrack(TrackCode.ARCHITECTURE, "Architecture", "Architecture track");
 
         CreateConferenceSessionCommand command = new CreateConferenceSessionCommand(
                 "Quarkus Insights",
@@ -62,7 +63,7 @@ public class CfpServiceTest {
                 "Test Conference",
                 "https://testconf.com",
                 "A test conference",
-                null,
+                List.of(new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session", Duration.ofMinutes(50))),
                 null,
                 email);
 

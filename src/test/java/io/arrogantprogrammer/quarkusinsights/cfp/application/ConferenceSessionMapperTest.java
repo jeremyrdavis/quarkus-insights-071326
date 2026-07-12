@@ -7,6 +7,7 @@ import io.arrogantprogrammer.quarkusinsights.cfp.persistence.ConferenceSessionEn
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -70,8 +71,8 @@ public class ConferenceSessionMapperTest {
         return ConferenceSession.create(
                 "Mapping Sessions",
                 "Abstract",
-                ConferenceSessionFormat.create(FormatCode.TECHNICAL_SESSION, "Technical", "Description"),
-                ConferenceTrack.create(TrackCode.ARCHITECTURE, "Arch", "Desc"),
+                new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical", "Description", Duration.ofMinutes(50)),
+                new ConferenceTrack(TrackCode.ARCHITECTURE, "Arch", "Desc"),
                 Level.BEGINNER,
                 Language.ENGLISH,
                 presenter,

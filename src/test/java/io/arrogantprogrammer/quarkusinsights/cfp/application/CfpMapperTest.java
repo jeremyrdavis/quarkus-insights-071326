@@ -4,6 +4,7 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class CfpMapperTest {
                 "Quarkus Insights",
                 "https://quarkus.io",
                 "Conference about Quarkus",
-                List.of(ConferenceSessionFormat.create(FormatCode.TECHNICAL_SESSION, "Technical Session", "A session about technology")),
-                List.of(ConferenceTrack.create(TrackCode.ARCHITECTURE, "Architecture", "Architecture track")),
+                List.of(new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A session about technology", Duration.ofMinutes(50))),
+                List.of(new ConferenceTrack(TrackCode.ARCHITECTURE, "Architecture", "Architecture track")),
                 new EmailAddress("info@quarkus.io"));
 
         CfpDTO cfpDTO = CfpMapper.toDTO(cfp);
