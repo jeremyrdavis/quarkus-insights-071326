@@ -1,9 +1,9 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
-import io.arrogantprogrammer.quarkusinsights.cfp.persistence.ConferenceSessionEntity;
+import io.arrogantprogrammer.quarkusinsights.cfp.persistence.SessionProposalEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,19 +14,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ConferenceSessionMapperTest {
+public class SessionProposalMapperTest {
 
-    private ConferenceSessionMapper mapper;
+    private SessionProposalMapper mapper;
 
     @BeforeEach
     public void setUp() {
-        mapper = new ConferenceSessionMapper();
+        mapper = new SessionProposalMapper();
     }
 
     @Test
     public void testToDTO() {
-        ConferenceSession session = createTestSession();
-        ConferenceSessionDTO dto = mapper.toDTO(session);
+        SessionProposal session = createTestSession();
+        SessionProposalDTO dto = SessionProposalMapper.toDTO(session);
 
         assertNotNull(dto);
         assertEquals(session.getTitle(), dto.title());
@@ -43,8 +43,8 @@ public class ConferenceSessionMapperTest {
 
     @Test
     public void testToEntity() {
-        ConferenceSession session = createTestSession();
-        ConferenceSessionEntity entity = mapper.toEntity(session);
+        SessionProposal session = createTestSession();
+        SessionProposalEntity entity = SessionProposalMapper.toEntity(session);
 
         assertNotNull(entity);
         assertEquals(session.getId(), entity.getId());
@@ -66,7 +66,7 @@ public class ConferenceSessionMapperTest {
         assertEquals("Java", entity.getProgrammingLanguagesUsed().get(0));
     }
 
-    private ConferenceSession createTestSession() {
+    private SessionProposal createTestSession() {
         Presenter presenter = Presenter.create(new EmailAddress("steve@example.com"), "Steve", "Jobs");
         ConferenceSessionFormat format = new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical", "Description", Duration.ofMinutes(50));
         ConferenceTrack track = new ConferenceTrack("ARCHITECTURE", "Arch", "Desc");
@@ -77,7 +77,7 @@ public class ConferenceSessionMapperTest {
                 List.of(track),
                 List.of());
 
-        return ConferenceSession.create(
+        return SessionProposal.create(
                 context,
                 "Mapping Sessions",
                 "Abstract",

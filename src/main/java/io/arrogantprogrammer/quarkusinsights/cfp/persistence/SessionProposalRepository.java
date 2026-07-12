@@ -5,27 +5,26 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceTrack;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.FormatCode;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ProgrammingLanguage;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
-public class ConferenceSessionRepository implements PanacheRepository<ConferenceSessionEntity> {
+public class SessionProposalRepository implements PanacheRepository<SessionProposalEntity> {
 
-    public List<ConferenceSession> findSessionProposalsByPresenterId(UUID presenterId) {
+    public List<SessionProposal> findSessionProposalsByPresenterId(UUID presenterId) {
         return list("presenter.id", presenterId).stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
 
-    private ConferenceSession toDomain(ConferenceSessionEntity entity) {
-        return new ConferenceSession(
+    private SessionProposal toDomain(SessionProposalEntity entity) {
+        return new SessionProposal(
                 entity.getId(),
                 entity.getTitle(),
                 entity.getDescription(),

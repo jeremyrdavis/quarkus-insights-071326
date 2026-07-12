@@ -5,7 +5,7 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 import java.time.LocalDate;
 import java.util.Collection;
 
-public class ConferenceSession {
+public class SessionProposal {
 
     private java.util.UUID id;
 
@@ -29,10 +29,10 @@ public class ConferenceSession {
 
     private Collection<ProgrammingLanguage> programmingLanguagesUsed;
 
-    public ConferenceSession() {
+    public SessionProposal() {
     }
 
-    public ConferenceSession(java.util.UUID id, String title, String description, ConferenceSessionFormat conferenceSessionFormat, ConferenceTrack conferenceTrack, Level level, Language language, Presenter presenter, String preRequisiteKnowledge, String presentationOutline, Collection<ProgrammingLanguage> programmingLanguagesUsed) {
+    public SessionProposal(java.util.UUID id, String title, String description, ConferenceSessionFormat conferenceSessionFormat, ConferenceTrack conferenceTrack, Level level, Language language, Presenter presenter, String preRequisiteKnowledge, String presentationOutline, Collection<ProgrammingLanguage> programmingLanguagesUsed) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -46,7 +46,7 @@ public class ConferenceSession {
         this.programmingLanguagesUsed = programmingLanguagesUsed;
     }
 
-    public static ConferenceSession create(
+    public static SessionProposal create(
             SubmissionContext submissionContext,
             String title,
             String description,
@@ -58,32 +58,25 @@ public class ConferenceSession {
             String preRequisiteKnowledge,
             String presentationOutline,
             Collection<ProgrammingLanguage> programmingLanguagesUsed) {
-        /*
-        TODO:
-        Check date
-        Check the number of exisiting submissions for this presenter
-         */
-        //First verify that the CFP is open
         LocalDate now = LocalDate.now();
         if (now.isBefore(submissionContext.cfpOpenDate())) {
             throw new IllegalArgumentException("CFP is not open yet");
-        }else if(now.isAfter(submissionContext.cfpCloseDate())) {
+        } else if (now.isAfter(submissionContext.cfpCloseDate())) {
             throw new IllegalArgumentException("CFP is closed");
         }
-        //
-        var conferenceSession = new ConferenceSession();
-        conferenceSession.id = java.util.UUID.randomUUID();
-        conferenceSession.title = title;
-        conferenceSession.description = description;
-        conferenceSession.conferenceSessionFormat = conferenceSessionFormat;
-        conferenceSession.conferenceTrack = conferenceTrack;
-        conferenceSession.level = level;
-        conferenceSession.language = language;
-        conferenceSession.presenter = presenter;
-        conferenceSession.preRequisiteKnowledge = preRequisiteKnowledge;
-        conferenceSession.presentationOutline = presentationOutline;
-        conferenceSession.programmingLanguagesUsed = programmingLanguagesUsed;
-        return conferenceSession;
+        var sessionProposal = new SessionProposal();
+        sessionProposal.id = java.util.UUID.randomUUID();
+        sessionProposal.title = title;
+        sessionProposal.description = description;
+        sessionProposal.conferenceSessionFormat = conferenceSessionFormat;
+        sessionProposal.conferenceTrack = conferenceTrack;
+        sessionProposal.level = level;
+        sessionProposal.language = language;
+        sessionProposal.presenter = presenter;
+        sessionProposal.preRequisiteKnowledge = preRequisiteKnowledge;
+        sessionProposal.presentationOutline = presentationOutline;
+        sessionProposal.programmingLanguagesUsed = programmingLanguagesUsed;
+        return sessionProposal;
     }
 
     public java.util.UUID getId() {
@@ -129,5 +122,4 @@ public class ConferenceSession {
     public Collection<ProgrammingLanguage> getProgrammingLanguagesUsed() {
         return programmingLanguagesUsed;
     }
-
 }

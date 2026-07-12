@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "conference_session")
-public class ConferenceSessionEntity {
+@Table(name = "session_proposal")
+public class SessionProposalEntity {
 
     @Id
     private java.util.UUID id;
@@ -47,10 +47,10 @@ public class ConferenceSessionEntity {
     @Column(name = "programming_language")
     private List<String> programmingLanguagesUsed = new ArrayList<>();
 
-    public ConferenceSessionEntity() {
+    public SessionProposalEntity() {
     }
 
-    public ConferenceSessionEntity(java.util.UUID id, String title, String description, FormatEntity format, TrackEntity track, Level level, Language language, PresenterEntity presenter, String preRequisiteKnowledge, String presentationOutline, List<String> programmingLanguagesUsed) {
+    public SessionProposalEntity(java.util.UUID id, String title, String description, FormatEntity format, TrackEntity track, Level level, Language language, PresenterEntity presenter, String preRequisiteKnowledge, String presentationOutline, List<String> programmingLanguagesUsed) {
         this.id = id;
         this.title = title;
         this.description = description;

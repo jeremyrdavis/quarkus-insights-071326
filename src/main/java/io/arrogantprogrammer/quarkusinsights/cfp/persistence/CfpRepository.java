@@ -52,7 +52,12 @@ public class CfpRepository implements PanacheRepository<CfpEntity> {
 
     @Transactional
     public boolean deleteCfp(UUID cfpId) {
-        return delete("id = ?1", cfpId) > 0;
+        CfpEntity entity = find("id", cfpId).<CfpEntity>firstResult();
+        if (entity == null) {
+            return false;
+        }
+        getEntityManager().remove(entity);
+        return true;
     }
 
 

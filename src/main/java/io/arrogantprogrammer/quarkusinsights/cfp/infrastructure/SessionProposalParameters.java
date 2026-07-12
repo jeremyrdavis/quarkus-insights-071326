@@ -6,7 +6,7 @@ import jakarta.validation.constraints.*;
 import java.util.Collection;
 import java.util.UUID;
 
-public record ConferenceSessionParameters(
+public record SessionProposalParameters(
         @NotNull(message = "cfpId is required") UUID cfpId,
         @NotBlank(message = "Title is required") String title,
         @NotBlank(message = "Description is required") String description,

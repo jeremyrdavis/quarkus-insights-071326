@@ -4,7 +4,7 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 
 import java.util.Collection;
 
-public record ConferenceSessionDTO(
+public record SessionProposalDTO(
         String title,
         String description,
         ConferenceSessionFormat conferenceSessionFormat,

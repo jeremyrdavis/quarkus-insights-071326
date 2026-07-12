@@ -20,15 +20,15 @@ public class CfpServiceTest {
     CfpApplicationService cfpService;
 
     @Test
-    public void testCreateConferenceSession() {
-        // CFP 44444444 is open Jul–Sep 2026; use it so ConferenceSession.create() doesn't reject the submission
+    public void testCreateSessionProposal() {
+        // CFP 44444444 is open Jul–Sep 2026; use it so SessionProposal.create() doesn't reject the submission
         UUID cfpId = UUID.fromString("44444444-4444-4444-4444-444444444444");
         EmailAddress email = new EmailAddress("test@example.com");
         ProgrammingLanguage java = new ProgrammingLanguage("Java");
         ConferenceSessionFormat conferenceSessionFormat = new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session", Duration.ofMinutes(50));
         ConferenceTrack conferenceTrack = new ConferenceTrack("ARCHITECTURE", "Architecture", "Architecture track");
 
-        CreateConferenceSessionCommand command = new CreateConferenceSessionCommand(
+        CreateSessionProposalCommand command = new CreateSessionProposalCommand(
                 cfpId,
                 "Quarkus Insights",
                 "A session about Quarkus",
@@ -41,7 +41,7 @@ public class CfpServiceTest {
                 List.of(java),
                 "Basic Java knowledge");
 
-        ConferenceSessionDTO result = cfpService.createConferenceSession(command);
+        SessionProposalDTO result = cfpService.createSessionProposal(command);
 
         assertNotNull(result);
         assertEquals("Quarkus Insights", result.title());

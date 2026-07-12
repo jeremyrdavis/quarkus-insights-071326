@@ -11,10 +11,10 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.SubmissionContext;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.SubmissionProposalApplicationService;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.TrackCode;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.CfpRepository;
-import io.arrogantprogrammer.quarkusinsights.cfp.persistence.ConferenceSessionRepository;
+import io.arrogantprogrammer.quarkusinsights.cfp.persistence.SessionProposalRepository;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -58,7 +58,7 @@ public class SubmissionProposalServiceTest {
     CfpRepository cfpRepository;
 
     @InjectMock
-    ConferenceSessionRepository conferenceSessionRepository;
+    SessionProposalRepository sessionProposalRepository;
 
     @BeforeEach
     public void setup() {
@@ -79,7 +79,7 @@ public class SubmissionProposalServiceTest {
                 new EmailAddress("speaker@quarkusinsights.io"),
                 "Jane",
                 "Doe");
-        ConferenceSession conferenceSession = new ConferenceSession(
+        SessionProposal sessionProposal = new SessionProposal(
                 UUID.randomUUID(),
                 "Getting Started with Quarkus",
                 "An introduction to building supersonic, subatomic Java applications",
@@ -91,8 +91,8 @@ public class SubmissionProposalServiceTest {
                 "Basic Java knowledge",
                 "Intro, live coding, Q&A",
                 List.of(new ProgrammingLanguage("Java")));
-        when(conferenceSessionRepository.findSessionProposalsByPresenterId(PRESENTER_ID))
-                .thenReturn(List.of(conferenceSession));
+        when(sessionProposalRepository.findSessionProposalsByPresenterId(PRESENTER_ID))
+                .thenReturn(List.of(sessionProposal));
     }
 
     @Test

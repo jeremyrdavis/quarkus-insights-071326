@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 
-public record CreateConferenceSessionCommand(
+public record CreateSessionProposalCommand(
         UUID cfpId,
         String title,
         String description,
@@ -18,7 +18,7 @@ public record CreateConferenceSessionCommand(
         Collection<ProgrammingLanguage> programmingLanguagesUsed,
         String preRequisiteKnowledge) {
 
-    public CreateConferenceSessionCommand {
+    public CreateSessionProposalCommand {
         Objects.requireNonNull(cfpId, "cfpId is required");
         Objects.requireNonNull(title, "title is required");
         Objects.requireNonNull(description, "description is required");

@@ -1,0 +1,592 @@
+{
+  "info": {
+    "name": "Quarkus Insights CFP API",
+    "description": "Test suite for the Quarkus Insights Conference Call-for-Papers REST API.\n\nRun the collection in order — POST requests capture IDs/emails into collection variables used by later requests.\n\nSeed data UUIDs:\n  - CFP (closed Jan–Mar 2026): 11111111-1111-1111-1111-111111111111\n  - CFP (open Jul–Sep 2026):   44444444-4444-4444-4444-444444444444",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "createdCfpId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdPresenterEmail",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "CFP",
+      "item": [
+        {
+          "name": "GET All CFPs",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cfp",
+              "host": ["{{baseUrl}}"],
+              "path": ["cfp"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns an array', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body).to.be.an('array');",
+                  "});",
+                  "pm.test('Contains at least the 2 seeded CFPs', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.length).to.be.at.least(2);",
+                  "});",
+                  "pm.test('Each CFP has an id and conferenceName', () => {",
+                  "    const body = pm.response.json();",
+                  "    body.forEach(cfp => {",
+                  "        pm.expect(cfp).to.have.property('id');",
+                  "        pm.expect(cfp).to.have.property('conferenceName');",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET CFP by ID - Seed (Quarkus Insights Conference)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cfp/11111111-1111-1111-1111-111111111111",
+              "host": ["{{baseUrl}}"],
+              "path": ["cfp", "11111111-1111-1111-1111-111111111111"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Correct conference name', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.conferenceName).to.eql('Quarkus Insights Conference');",
+                  "});",
+                  "pm.test('Has formats and tracks', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.conferenceSessionFormats).to.be.an('array').with.length.above(0);",
+                  "    pm.expect(body.tracks).to.be.an('array').with.length.above(0);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET CFP by ID - Not Found",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cfp/00000000-0000-0000-0000-000000000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["cfp", "00000000-0000-0000-0000-000000000000"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 for unknown ID', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST Create CFP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cfpOpens\": \"2027-01-01\",\n  \"cfpCloses\": \"2027-03-31\",\n  \"conferenceName\": \"Postman Test Conference 2027\",\n  \"conferenceUrl\": \"https://postmantest2027.io\",\n  \"conferenceDescription\": \"A conference created via the Postman test suite to verify CFP creation.\",\n  \"contactEmailAddress\": \"cfp@postmantest2027.io\",\n  \"conferenceTracks\": [\n    {\n      \"trackCode\": \"JAVA_LANGUAGE\",\n      \"title\": \"Java Language\",\n      \"description\": \"The Java language, new features, and the JVM\"\n    },\n    {\n      \"trackCode\": \"CLOUD\",\n      \"title\": \"Cloud\",\n      \"description\": \"Cloud-native development and Kubernetes\"\n    }\n  ],\n  \"formats\": [\n    {\n      \"formatCode\": \"TECHNICAL_SESSION\",\n      \"title\": \"Technical Session\",\n      \"description\": \"A standard 45-minute technical talk\",\n      \"duration\": \"PT45M\"\n    },\n    {\n      \"formatCode\": \"HANDS_ON_LAB\",\n      \"title\": \"Hands-on Lab\",\n      \"description\": \"A 2-hour interactive workshop\",\n      \"duration\": \"PT2H\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cfp",
+              "host": ["{{baseUrl}}"],
+              "path": ["cfp"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Response has an id', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.id).to.be.a('string').and.have.length.above(0);",
+                  "    pm.collectionVariables.set('createdCfpId', body.id);",
+                  "});",
+                  "pm.test('Conference name matches', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.conferenceName).to.eql('Postman Test Conference 2027');",
+                  "});",
+                  "pm.test('Has 2 formats', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.conferenceSessionFormats).to.be.an('array').with.lengthOf(2);",
+                  "});",
+                  "pm.test('Has 2 tracks', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.tracks).to.be.an('array').with.lengthOf(2);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET CFP by ID - Created",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cfp/{{createdCfpId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cfp", "{{createdCfpId}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns the created CFP', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.id).to.eql(pm.collectionVariables.get('createdCfpId'));",
+                  "    pm.expect(body.conferenceName).to.eql('Postman Test Conference 2027');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Update CFP",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cfpOpens\": \"2027-02-01\",\n  \"cfpCloses\": \"2027-04-30\",\n  \"conferenceName\": \"Postman Test Conference 2027 (Updated)\",\n  \"conferenceUrl\": \"https://postmantest2027-updated.io\",\n  \"conferenceDescription\": \"Updated conference description via Postman.\",\n  \"contactEmailAddress\": \"updated-cfp@postmantest2027.io\",\n  \"conferenceTracks\": [\n    {\n      \"trackCode\": \"ARCHITECTURE\",\n      \"title\": \"Architecture\",\n      \"description\": \"Software architecture, DDD, and system design\"\n    }\n  ],\n  \"formats\": [\n    {\n      \"formatCode\": \"KEYNOTE\",\n      \"title\": \"Keynote\",\n      \"description\": \"A featured presentation for all attendees\",\n      \"duration\": \"PT1H\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cfp/{{createdCfpId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cfp", "{{createdCfpId}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Conference name is updated', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.conferenceName).to.eql('Postman Test Conference 2027 (Updated)');",
+                  "});",
+                  "pm.test('CFP dates are updated', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.cfpOpens).to.eql('2027-02-01');",
+                  "    pm.expect(body.cfpCloses).to.eql('2027-04-30');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE CFP",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cfp/{{createdCfpId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cfp", "{{createdCfpId}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET CFP by ID - After Delete (404)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cfp/{{createdCfpId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["cfp", "{{createdCfpId}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 after deletion', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Presenters",
+      "item": [
+        {
+          "name": "POST Create Presenter",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jane.postman@example.com\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Postman\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/presenters",
+              "host": ["{{baseUrl}}"],
+              "path": ["presenters"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Response has id and email', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.id).to.be.a('string');",
+                  "    pm.expect(body.emailAddress).to.be.an('object').with.property('address');",
+                  "    pm.collectionVariables.set('createdPresenterEmail', body.emailAddress.address);",
+                  "});",
+                  "pm.test('Name fields match', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.firstName).to.eql('Jane');",
+                  "    pm.expect(body.lastName).to.eql('Postman');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Presenter by Email",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presenters/{{createdPresenterEmail}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["presenters", "{{createdPresenterEmail}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Returns correct presenter', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.emailAddress.address).to.eql(pm.collectionVariables.get('createdPresenterEmail'));",
+                  "    pm.expect(body.firstName).to.eql('Jane');",
+                  "    pm.expect(body.lastName).to.eql('Postman');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Presenter by Email - Not Found",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presenters/nobody@nowhere.com",
+              "host": ["{{baseUrl}}"],
+              "path": ["presenters", "nobody@nowhere.com"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 for unknown email', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Update Presenter",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jane.postman@example.com\",\n  \"firstName\": \"Jane Updated\",\n  \"lastName\": \"Postman Updated\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/presenters/{{createdPresenterEmail}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["presenters", "{{createdPresenterEmail}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Name fields are updated', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.firstName).to.eql('Jane Updated');",
+                  "    pm.expect(body.lastName).to.eql('Postman Updated');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE Presenter",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/presenters/{{createdPresenterEmail}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["presenters", "{{createdPresenterEmail}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 204 No Content', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Presenter - After Delete (404)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/presenters/{{createdPresenterEmail}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["presenters", "{{createdPresenterEmail}}"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 404 after deletion', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Session Proposals",
+      "item": [
+        {
+          "name": "POST Create Session Proposal (Open CFP)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cfpId\": \"44444444-4444-4444-4444-444444444444\",\n  \"title\": \"Getting Started with Quarkus\",\n  \"description\": \"An introduction to building cloud-native Java applications with Quarkus — from zero to a fully containerised microservice.\",\n  \"conferenceSessionFormat\": {\n    \"formatCode\": \"TECHNICAL_SESSION\",\n    \"title\": \"Technical Session\",\n    \"description\": \"A standard technical talk\",\n    \"duration\": \"PT45M\"\n  },\n  \"conferenceTrack\": {\n    \"trackCode\": \"SERVER_SIDE_JAVA\",\n    \"title\": \"Server-Side Java\",\n    \"description\": \"Frameworks and libraries for server-side Java development\"\n  },\n  \"level\": \"BEGINNER\",\n  \"language\": \"ENGLISH\",\n  \"presenterEmail\": \"speaker@example.com\",\n  \"presentationOutline\": \"1. What is Quarkus?  2. Live coding demo  3. Native image build  4. Q&A\",\n  \"programmingLanguagesUsed\": [\n    { \"language\": \"Java\" }\n  ],\n  \"preRequisiteKnowledge\": \"Basic Java knowledge required\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/session-proposals",
+              "host": ["{{baseUrl}}"],
+              "path": ["session-proposals"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Title matches', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.title).to.eql('Getting Started with Quarkus');",
+                  "});",
+                  "pm.test('Format and track are present', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.conferenceSessionFormat).to.be.an('object');",
+                  "    pm.expect(body.conferenceTrack).to.be.an('object');",
+                  "});",
+                  "pm.test('Level and language match', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.level).to.eql('BEGINNER');",
+                  "    pm.expect(body.language).to.eql('ENGLISH');",
+                  "});",
+                  "pm.test('Programming languages are present', () => {",
+                  "    const body = pm.response.json();",
+                  "    pm.expect(body.programmingLanguagesUsed).to.be.an('array').with.lengthOf(1);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST Create Session Proposal - Validation Error (missing title)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cfpId\": \"44444444-4444-4444-4444-444444444444\",\n  \"description\": \"Missing required title field\",\n  \"conferenceSessionFormat\": {\n    \"formatCode\": \"TECHNICAL_SESSION\",\n    \"title\": \"Technical Session\",\n    \"description\": \"A standard technical talk\",\n    \"duration\": \"PT45M\"\n  },\n  \"conferenceTrack\": {\n    \"trackCode\": \"CLOUD\",\n    \"title\": \"Cloud\",\n    \"description\": \"Cloud-native development\"\n  },\n  \"level\": \"INTERMEDIATE\",\n  \"language\": \"ENGLISH\",\n  \"presenterEmail\": \"speaker@example.com\",\n  \"presentationOutline\": \"Some outline\",\n  \"programmingLanguagesUsed\": [\n    { \"language\": \"Java\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/session-proposals",
+              "host": ["{{baseUrl}}"],
+              "path": ["session-proposals"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400 for missing required field', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST Create Session Proposal - Validation Error (missing programming languages)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cfpId\": \"44444444-4444-4444-4444-444444444444\",\n  \"title\": \"A Talk Without Languages\",\n  \"description\": \"This should fail validation\",\n  \"conferenceSessionFormat\": {\n    \"formatCode\": \"TECHNICAL_SESSION\",\n    \"title\": \"Technical Session\",\n    \"description\": \"A standard technical talk\",\n    \"duration\": \"PT45M\"\n  },\n  \"conferenceTrack\": {\n    \"trackCode\": \"CLOUD\",\n    \"title\": \"Cloud\",\n    \"description\": \"Cloud-native development\"\n  },\n  \"level\": \"INTERMEDIATE\",\n  \"language\": \"ENGLISH\",\n  \"presenterEmail\": \"speaker@example.com\",\n  \"presentationOutline\": \"Some outline\",\n  \"programmingLanguagesUsed\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/session-proposals",
+              "host": ["{{baseUrl}}"],
+              "path": ["session-proposals"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 400 for empty programming languages', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

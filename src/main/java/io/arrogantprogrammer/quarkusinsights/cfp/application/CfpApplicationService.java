@@ -2,7 +2,7 @@ package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.SubmissionContext;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
 import io.arrogantprogrammer.quarkusinsights.cfp.infrastructure.PresenterParameters;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.*;
@@ -23,7 +23,7 @@ public class CfpApplicationService {
     CfpRepository cfpRepository;
 
     @Inject
-    ConferenceSessionRepository conferenceSessionRepository;
+    SessionProposalRepository sessionProposalRepository;
 
     @Inject
     PresenterRepository presenterRepository;
@@ -95,10 +95,10 @@ public class CfpApplicationService {
     }
 
     @Transactional
-    public ConferenceSessionDTO createConferenceSession(CreateConferenceSessionCommand command) {
-        Log.debugf("createConferenceSession: {}", command);
+    public SessionProposalDTO createSessionProposal(CreateSessionProposalCommand command) {
+        Log.debugf("createSessionProposal: {}", command);
         SubmissionContext submissionContext = submissionProposalApplicationService.getSubmissionContext(command.cfpId(), null);
-        ConferenceSession conferenceSession = ConferenceSession.create(
+        SessionProposal sessionProposal = SessionProposal.create(
                 submissionContext,
                 command.title(),
                 command.description(),
@@ -110,13 +110,13 @@ public class CfpApplicationService {
                 command.preRequisiteKnowledge(),
                 command.presentationOutline(),
                 command.programmingLanguagesUsed());
-        Log.debugf("createConferenceSession: {}", conferenceSession);
+        Log.debugf("createSessionProposal: {}", sessionProposal);
 
-        ConferenceSessionEntity conferenceSessionEntity = ConferenceSessionMapper.toEntity(conferenceSession);
-        Log.debugf("persisting : {}", conferenceSessionEntity);
-        conferenceSessionRepository.persist(conferenceSessionEntity);
-        Log.debugf("persisted : {}", conferenceSessionEntity);
+        SessionProposalEntity sessionProposalEntity = SessionProposalMapper.toEntity(sessionProposal);
+        Log.debugf("persisting : {}", sessionProposalEntity);
+        sessionProposalRepository.persist(sessionProposalEntity);
+        Log.debugf("persisted : {}", sessionProposalEntity);
 
-        return ConferenceSessionMapper.toDTO(conferenceSession);
+        return SessionProposalMapper.toDTO(sessionProposal);
     }
 }
