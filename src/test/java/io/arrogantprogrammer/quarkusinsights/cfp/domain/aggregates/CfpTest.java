@@ -12,10 +12,10 @@ public class CfpTest {
 
     static final EmailAddress CONTACT_EMAIL = new EmailAddress("info@nljug.org");
 
-    static final List<Track> ALL_TRACKS = List.of(
-            Track.create(TrackCode.JAVA_LANGUAGE, "Java Language", "All things Java language and runtime."),
-            Track.create(TrackCode.CLOUD, "Cloud", "Cloud native development, Kubernetes, and serverless."),
-            Track.create(TrackCode.DATA_AI, "Data & AI", "Data engineering, machine learning, and artificial intelligence.")
+    static final List<ConferenceTrack> ALL_CONFERENCE_TRACKS = List.of(
+            ConferenceTrack.create(TrackCode.JAVA_LANGUAGE, "Java Language", "All things Java language and runtime."),
+            ConferenceTrack.create(TrackCode.CLOUD, "Cloud", "Cloud native development, Kubernetes, and serverless."),
+            ConferenceTrack.create(TrackCode.DATA_AI, "Data & AI", "Data engineering, machine learning, and artificial intelligence.")
     );
 
     static final List<ConferenceSessionFormat> ALL_CONFERENCE_SESSION_FORMATS = List.of(
@@ -34,7 +34,7 @@ public class CfpTest {
                 "https://j-fall.nl",
                 "The biggest Java conference in the Netherlands.",
                 ALL_CONFERENCE_SESSION_FORMATS,
-                ALL_TRACKS,
+                ALL_CONFERENCE_TRACKS,
                 CONTACT_EMAIL);
 
         assertEquals("J-Fall 2026", cfp.getConferenceName());

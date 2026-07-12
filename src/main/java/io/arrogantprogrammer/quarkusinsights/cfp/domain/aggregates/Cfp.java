@@ -1,8 +1,8 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSessionFormat;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceTrack;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.Track;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,14 +23,14 @@ public class Cfp {
 
     private List<ConferenceSessionFormat> conferenceSessionFormats;
 
-    private List<Track> tracks;
+    private List<ConferenceTrack> conferenceTracks;
 
     private EmailAddress contactEmailAddress;
 
     public Cfp() {
     }
 
-    public Cfp(java.util.UUID id, LocalDate cfpOpens, LocalDate cfpCloses, String conferenceName, String conferenceUrl, String conferenceDescription, List<ConferenceSessionFormat> conferenceSessionFormats, List<Track> tracks, EmailAddress contactEmailAddress) {
+    public Cfp(java.util.UUID id, LocalDate cfpOpens, LocalDate cfpCloses, String conferenceName, String conferenceUrl, String conferenceDescription, List<ConferenceSessionFormat> conferenceSessionFormats, List<ConferenceTrack> conferenceTracks, EmailAddress contactEmailAddress) {
         this.id = id;
         this.cfpOpens = cfpOpens;
         this.cfpCloses = cfpCloses;
@@ -38,7 +38,7 @@ public class Cfp {
         this.conferenceUrl = conferenceUrl;
         this.conferenceDescription = conferenceDescription;
         this.conferenceSessionFormats = conferenceSessionFormats == null ? new java.util.ArrayList<>() : conferenceSessionFormats;
-        this.tracks = tracks == null ? new java.util.ArrayList<>() : tracks;
+        this.conferenceTracks = conferenceTracks == null ? new java.util.ArrayList<>() : conferenceTracks;
         this.contactEmailAddress = contactEmailAddress;
     }
 
@@ -49,7 +49,7 @@ public class Cfp {
             String conferenceUrl,
             String conferenceDescription,
             List<ConferenceSessionFormat> conferenceSessionFormats,
-            List<Track> tracks,
+            List<ConferenceTrack> conferenceTracks,
             EmailAddress contactEmailAddress) {
         Cfp cfp = new Cfp();
         cfp.id = java.util.UUID.randomUUID();
@@ -59,7 +59,7 @@ public class Cfp {
         cfp.conferenceUrl = conferenceUrl;
         cfp.conferenceDescription = conferenceDescription;
         cfp.conferenceSessionFormats = conferenceSessionFormats == null ? new java.util.ArrayList<>() : conferenceSessionFormats;
-        cfp.tracks = tracks == null ? new java.util.ArrayList<>() : tracks;
+        cfp.conferenceTracks = conferenceTracks == null ? new java.util.ArrayList<>() : conferenceTracks;
         cfp.contactEmailAddress = contactEmailAddress;
         return cfp;
     }
@@ -96,8 +96,8 @@ public class Cfp {
         return conferenceSessionFormats;
     }
 
-    public List<Track> getTracks() {
-        return tracks;
+    public List<ConferenceTrack> getTracks() {
+        return conferenceTracks;
     }
 
 }

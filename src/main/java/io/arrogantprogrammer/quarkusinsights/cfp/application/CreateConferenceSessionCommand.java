@@ -8,7 +8,7 @@ public record CreateConferenceSessionCommand(
         String title,
         String description,
         ConferenceSessionFormat conferenceSessionFormat,
-        Track track,
+        ConferenceTrack conferenceTrack,
         Level level,
         Language language,
         EmailAddress presenterEmail,
@@ -20,7 +20,7 @@ public record CreateConferenceSessionCommand(
         Objects.requireNonNull(title, "title is required");
         Objects.requireNonNull(description, "description is required");
         Objects.requireNonNull(conferenceSessionFormat, "format is required");
-        Objects.requireNonNull(track, "track is required");
+        Objects.requireNonNull(conferenceTrack, "track is required");
         Objects.requireNonNull(level, "level is required");
         Objects.requireNonNull(language, "language is required");
         Objects.requireNonNull(presenterEmail, "presenterEmail is required");

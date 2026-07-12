@@ -24,7 +24,7 @@ public class ConferenceSessionResource {
                 parameters.title(),
                 parameters.description(),
                 parameters.conferenceSessionFormat(),
-                parameters.track(),
+                parameters.conferenceTrack(),
                 parameters.level(),
                 parameters.language(),
                 new EmailAddress(parameters.presenterEmail()),

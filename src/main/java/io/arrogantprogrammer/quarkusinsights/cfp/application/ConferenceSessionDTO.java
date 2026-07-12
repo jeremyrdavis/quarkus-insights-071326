@@ -8,7 +8,7 @@ public record ConferenceSessionDTO(
         String title,
         String description,
         ConferenceSessionFormat conferenceSessionFormat,
-        Track track,
+        ConferenceTrack conferenceTrack,
         Level level,
         Language language,
         PresenterDTO presenter,

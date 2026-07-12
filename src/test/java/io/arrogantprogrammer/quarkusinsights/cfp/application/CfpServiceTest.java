@@ -22,13 +22,13 @@ public class CfpServiceTest {
         EmailAddress email = new EmailAddress("test@example.com");
         ProgrammingLanguage java = new ProgrammingLanguage("Java");
         ConferenceSessionFormat conferenceSessionFormat = ConferenceSessionFormat.create(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session");
-        Track track = Track.create(TrackCode.ARCHITECTURE, "Architecture", "Architecture track");
+        ConferenceTrack conferenceTrack = ConferenceTrack.create(TrackCode.ARCHITECTURE, "Architecture", "Architecture track");
 
         CreateConferenceSessionCommand command = new CreateConferenceSessionCommand(
                 "Quarkus Insights",
                 "A session about Quarkus",
                 conferenceSessionFormat,
-                track,
+                conferenceTrack,
                 Level.INTERMEDIATE,
                 Language.ENGLISH,
                 email,
@@ -42,7 +42,7 @@ public class CfpServiceTest {
         assertEquals("Quarkus Insights", result.title());
         assertEquals("A session about Quarkus", result.description());
         assertEquals(conferenceSessionFormat, result.conferenceSessionFormat());
-        assertEquals(track, result.track());
+        assertEquals(conferenceTrack, result.conferenceTrack());
         assertEquals(Level.INTERMEDIATE, result.level());
         assertEquals(Language.ENGLISH, result.language());
         assertEquals("1. Intro, 2. Demo, 3. Q&A", result.presentationOutline());

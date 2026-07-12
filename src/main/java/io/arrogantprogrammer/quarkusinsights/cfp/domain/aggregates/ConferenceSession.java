@@ -14,7 +14,7 @@ public class ConferenceSession {
 
     private ConferenceSessionFormat conferenceSessionFormat;
 
-    private Track track;
+    private ConferenceTrack conferenceTrack;
 
     private Level level;
 
@@ -31,12 +31,12 @@ public class ConferenceSession {
     public ConferenceSession() {
     }
 
-    public ConferenceSession(java.util.UUID id, String title, String description, ConferenceSessionFormat conferenceSessionFormat, Track track, Level level, Language language, Presenter presenter, String preRequisiteKnowledge, String presentationOutline, Collection<ProgrammingLanguage> programmingLanguagesUsed) {
+    public ConferenceSession(java.util.UUID id, String title, String description, ConferenceSessionFormat conferenceSessionFormat, ConferenceTrack conferenceTrack, Level level, Language language, Presenter presenter, String preRequisiteKnowledge, String presentationOutline, Collection<ProgrammingLanguage> programmingLanguagesUsed) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.conferenceSessionFormat = conferenceSessionFormat;
-        this.track = track;
+        this.conferenceTrack = conferenceTrack;
         this.level = level;
         this.language = language;
         this.presenter = presenter;
@@ -49,7 +49,7 @@ public class ConferenceSession {
             String title,
             String description,
             ConferenceSessionFormat conferenceSessionFormat,
-            Track track,
+            ConferenceTrack conferenceTrack,
             Level level,
             Language language,
             Presenter presenter,
@@ -61,7 +61,7 @@ public class ConferenceSession {
         conferenceSession.title = title;
         conferenceSession.description = description;
         conferenceSession.conferenceSessionFormat = conferenceSessionFormat;
-        conferenceSession.track = track;
+        conferenceSession.conferenceTrack = conferenceTrack;
         conferenceSession.level = level;
         conferenceSession.language = language;
         conferenceSession.presenter = presenter;
@@ -87,8 +87,8 @@ public class ConferenceSession {
         return conferenceSessionFormat;
     }
 
-    public Track getTrack() {
-        return track;
+    public ConferenceTrack getTrack() {
+        return conferenceTrack;
     }
 
     public Level getLevel() {

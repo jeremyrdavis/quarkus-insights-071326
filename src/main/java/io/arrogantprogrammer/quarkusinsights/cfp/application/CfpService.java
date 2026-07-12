@@ -64,10 +64,10 @@ public class CfpService {
                 command.conferenceUrl(),
                 command.conferenceDescription(),
                 command.conferenceSessionFormats(),
-                command.tracks(),
+                command.conferenceTracks(),
                 command.contactEmailAddress());
-        Cfp createdCfp = cfpRepository.createCfp(cfp);
-        return CfpMapper.toDTO(createdCfp);
+        Cfp persistedCfp = cfpRepository.createCfp(cfp);
+        return CfpMapper.toDTO(persistedCfp);
     }
 
     @Transactional
@@ -78,7 +78,7 @@ public class CfpService {
                 command.title(),
                 command.description(),
                 command.conferenceSessionFormat(),
-                command.track(),
+                command.conferenceTrack(),
                 command.level(),
                 command.language(),
                 null,

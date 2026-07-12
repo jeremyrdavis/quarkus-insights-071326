@@ -18,7 +18,7 @@ public class CfpResourceTest {
                 "conferenceUrl": "https://testconf.example.com",
                 "conferenceDescription": "A comprehensive test conference for software developers",
                 "contactEmailAddress": "cfp@testconf.example.com",
-                "tracks": [
+                "conferenceTracks": [
                     {"name": "Architecture", "description": "System design and architecture"},
                     {"name": "Cloud Native", "description": "Cloud-native technologies"}
                 ],

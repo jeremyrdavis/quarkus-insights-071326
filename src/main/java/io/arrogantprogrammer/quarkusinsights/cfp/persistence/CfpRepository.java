@@ -2,7 +2,7 @@ package io.arrogantprogrammer.quarkusinsights.cfp.persistence;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSessionFormat;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.Track;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceTrack;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -50,7 +50,7 @@ public class CfpRepository implements PanacheRepository<CfpEntity> {
                         .map(f -> new ConferenceSessionFormat(f.getFormatCode(), f.getTitle(), f.getDescription(), f.getDuration()))
                         .collect(Collectors.toList()),
                 cfpEntity.getTracks().stream()
-                        .map(t -> new Track(t.getTrackCode(), t.getTitle(), t.getDescription()))
+                        .map(t -> new ConferenceTrack(t.getTrackCode(), t.getTitle(), t.getDescription()))
                         .collect(Collectors.toList()),
                 new EmailAddress(cfpEntity.getContactEmailAddress())
         );
