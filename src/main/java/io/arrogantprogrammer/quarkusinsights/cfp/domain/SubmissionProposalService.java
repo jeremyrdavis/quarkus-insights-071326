@@ -21,7 +21,8 @@ public class SubmissionProposalService {
     ConferenceSessionRepository conferenceSessionRepository;
 
     public SubmissionContext getSubmissionContext(UUID cfpId, UUID presenterId) {
-        Cfp cfp = cfpRepository.findByUUID(cfpId);
+        Cfp cfp = cfpRepository.findByUUID(cfpId)
+                .orElseThrow(() -> new IllegalArgumentException("CFP not found: " + cfpId));
         List<ConferenceSession> currentSessions = conferenceSessionRepository.findSessionProposalsByPresenterId(presenterId);
         return new SubmissionContext(cfp.getCfpOpens(), cfp.getCfpCloses(), cfp.getConferenceSessionFormats(), cfp.getTracks(), currentSessions);
     }

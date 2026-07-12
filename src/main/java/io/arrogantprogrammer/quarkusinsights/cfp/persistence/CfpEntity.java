@@ -84,4 +84,28 @@ public class CfpEntity {
     public String getContactEmailAddress() {
         return contactEmailAddress;
     }
+
+    public void setCfpOpens(LocalDate cfpOpens) {
+        this.cfpOpens = cfpOpens;
+    }
+
+    public void setCfpCloses(LocalDate cfpCloses) {
+        this.cfpCloses = cfpCloses;
+    }
+
+    public void setConferenceName(String conferenceName) {
+        this.conferenceName = conferenceName;
+    }
+
+    public void setConferenceUrl(String conferenceUrl) {
+        this.conferenceUrl = conferenceUrl;
+    }
+
+    public void setConferenceDescription(String conferenceDescription) {
+        this.conferenceDescription = conferenceDescription;
+    }
+
+    public void setContactEmailAddress(String contactEmailAddress) {
+        this.contactEmailAddress = contactEmailAddress;
+    }
 }

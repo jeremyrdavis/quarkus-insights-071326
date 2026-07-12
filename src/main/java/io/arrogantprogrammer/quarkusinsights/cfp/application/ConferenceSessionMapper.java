@@ -31,7 +31,7 @@ public class ConferenceSessionMapper {
                 conferenceSession.getTitle(),
                 conferenceSession.getDescription(),
                 new FormatEntity(
-                        conferenceSession.getFormat().formatCode(),
+                        conferenceSession.getFormat().formatCode().name(),
                         conferenceSession.getFormat().title(),
                         conferenceSession.getFormat().description(),
                         conferenceSession.getFormat().duration()

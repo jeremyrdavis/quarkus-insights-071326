@@ -11,8 +11,7 @@ public class TrackEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private java.util.UUID id;
 
-    @Enumerated(EnumType.STRING)
-    private TrackCode trackCode;
+    private String trackCode;
 
     private String title;
 
@@ -21,7 +20,7 @@ public class TrackEntity {
     public TrackEntity() {
     }
 
-    public TrackEntity(TrackCode trackCode, String title, String description) {
+    public TrackEntity(String trackCode, String title, String description) {
         this.trackCode = trackCode;
         this.title = title;
         this.description = description;
@@ -31,7 +30,7 @@ public class TrackEntity {
         return id;
     }
 
-    public TrackCode getTrackCode() {
+    public String getTrackCode() {
         return trackCode;
     }
 

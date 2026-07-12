@@ -21,6 +21,7 @@ public class ConferenceSessionResource {
     public Response createConferenceSession(@Valid ConferenceSessionParameters parameters) {
         Log.debugf("createConferenceSession: {}", parameters);
         CreateConferenceSessionCommand createConferenceSessionCommand = new CreateConferenceSessionCommand(
+                parameters.cfpId(),
                 parameters.title(),
                 parameters.description(),
                 parameters.conferenceSessionFormat(),

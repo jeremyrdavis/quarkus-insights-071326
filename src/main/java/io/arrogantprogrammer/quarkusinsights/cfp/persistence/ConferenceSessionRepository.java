@@ -2,6 +2,7 @@ package io.arrogantprogrammer.quarkusinsights.cfp.persistence;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSessionFormat;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceTrack;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.FormatCode;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ProgrammingLanguage;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.ConferenceSession;
@@ -29,7 +30,7 @@ public class ConferenceSessionRepository implements PanacheRepository<Conference
                 entity.getTitle(),
                 entity.getDescription(),
                 new ConferenceSessionFormat(
-                        entity.getFormat().getFormatCode(),
+                        FormatCode.valueOf(entity.getFormat().getFormatCode()),
                         entity.getFormat().getTitle(),
                         entity.getFormat().getDescription(),
                         entity.getFormat().getDuration()),

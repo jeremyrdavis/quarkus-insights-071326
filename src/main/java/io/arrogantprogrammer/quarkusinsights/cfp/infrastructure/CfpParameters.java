@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-record CfpParameters(
+public record CfpParameters(
         @NotNull(message = "CFP ID is required") UUID cfpId,
         @NotNull(message = "CFP opening date is required") LocalDate cfpOpens,
         @NotNull(message = "CFP closing date is required") LocalDate cfpCloses,

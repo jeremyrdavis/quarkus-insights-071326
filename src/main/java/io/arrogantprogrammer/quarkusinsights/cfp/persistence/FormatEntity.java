@@ -12,8 +12,7 @@ public class FormatEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private java.util.UUID id;
 
-    @Enumerated(EnumType.STRING)
-    private FormatCode formatCode;
+    private String formatCode;
 
     private String title;
 
@@ -24,7 +23,7 @@ public class FormatEntity {
     public FormatEntity() {
     }
 
-    public FormatEntity(FormatCode formatCode, String title, String description, Duration duration) {
+    public FormatEntity(String formatCode, String title, String description, Duration duration) {
         this.formatCode = formatCode;
         this.title = title;
         this.description = description;
@@ -35,7 +34,7 @@ public class FormatEntity {
         return id;
     }
 
-    public FormatCode getFormatCode() {
+    public String getFormatCode() {
         return formatCode;
     }
 

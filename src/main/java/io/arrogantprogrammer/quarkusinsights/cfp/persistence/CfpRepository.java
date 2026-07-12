@@ -1,14 +1,18 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.persistence;
 
+import io.arrogantprogrammer.quarkusinsights.cfp.application.UpdateCfpCommand;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSessionFormat;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceTrack;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.FormatCode;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -22,10 +26,33 @@ public class CfpRepository implements PanacheRepository<CfpEntity> {
         return toDomain(cfpEntity);
     }
 
-    public Cfp findByUUID(UUID cfpId) {
-        CfpEntity cfpEntity = (CfpEntity) find("id = ?1", cfpId);
-        Log.debugf("Found CFP with id %s", cfpId);
-        return toDomain(cfpEntity);
+    public Optional<Cfp> findByUUID(UUID cfpId) {
+        return Optional.ofNullable(find("id", cfpId).<CfpEntity>firstResult()).map(this::toDomain);
+    }
+
+    public List<Cfp> findAllCfps() {
+        return listAll().stream().map(this::toDomain).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Optional<Cfp> updateCfp(UUID cfpId, UpdateCfpCommand command) {
+        CfpEntity entity = find("id", cfpId).firstResult();
+        if (entity == null) {
+            return Optional.empty();
+        }
+        entity.setCfpOpens(command.cfpOpens());
+        entity.setCfpCloses(command.cfpCloses());
+        entity.setConferenceName(command.conferenceName());
+        entity.setConferenceUrl(command.conferenceUrl());
+        entity.setConferenceDescription(command.conferenceDescription());
+        entity.setContactEmailAddress(command.contactEmailAddress().address());
+        Log.debugf("Updated CFP with id %s", cfpId);
+        return Optional.of(toDomain(entity));
+    }
+
+    @Transactional
+    public boolean deleteCfp(UUID cfpId) {
+        return delete("id = ?1", cfpId) > 0;
     }
 
 
@@ -38,10 +65,10 @@ public class CfpRepository implements PanacheRepository<CfpEntity> {
                 cfp.getConferenceUrl(),
                 cfp.getConferenceDescription(),
                 cfp.getConferenceSessionFormats().stream()
-                        .map(f -> new FormatEntity(f.formatCode(), f.title(), f.description(), f.duration()))
+                        .map(f -> new FormatEntity(f.formatCode().name(), f.title(), f.description(), f.duration()))
                         .collect(Collectors.toList()),
                 cfp.getTracks().stream()
-                        .map(t -> new TrackEntity(t.trackCode(), t.title(), t.description()))
+                        .map(t -> new TrackEntity(t.trackCode().toString(), t.title(), t.description()))
                         .collect(Collectors.toList()),
                 cfp.getContactEmailAddress().address()
         );
@@ -56,10 +83,10 @@ public class CfpRepository implements PanacheRepository<CfpEntity> {
                 cfpEntity.getConferenceUrl(),
                 cfpEntity.getConferenceDescription(),
                 cfpEntity.getConferenceSessionFormats().stream()
-                        .map(f -> new ConferenceSessionFormat(f.getFormatCode(), f.getTitle(), f.getDescription(), f.getDuration()))
+                        .map(f -> new ConferenceSessionFormat(FormatCode.valueOf(f.getFormatCode()), f.getTitle(), f.getDescription(), f.getDuration()))
                         .collect(Collectors.toList()),
                 cfpEntity.getTracks().stream()
-                        .map(t -> new ConferenceTrack(t.getTrackCode(), t.getTitle(), t.getDescription()))
+                        .map(t -> new ConferenceTrack(t.getTrackCode().toString(), t.getTitle(), t.getDescription()))
                         .collect(Collectors.toList()),
                 new EmailAddress(cfpEntity.getContactEmailAddress())
         );

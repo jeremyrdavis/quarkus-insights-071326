@@ -4,8 +4,10 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 import jakarta.validation.constraints.*;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public record ConferenceSessionParameters(
+        @NotNull(message = "cfpId is required") UUID cfpId,
         @NotBlank(message = "Title is required") String title,
         @NotBlank(message = "Description is required") String description,
         @NotNull(message = "Format is required") ConferenceSessionFormat conferenceSessionFormat,

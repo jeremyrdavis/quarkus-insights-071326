@@ -2,6 +2,7 @@ package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 
+import java.time.LocalDate;
 import java.util.Collection;
 
 public class ConferenceSession {
@@ -46,6 +47,7 @@ public class ConferenceSession {
     }
 
     public static ConferenceSession create(
+            SubmissionContext submissionContext,
             String title,
             String description,
             ConferenceSessionFormat conferenceSessionFormat,
@@ -61,6 +63,14 @@ public class ConferenceSession {
         Check date
         Check the number of exisiting submissions for this presenter
          */
+        //First verify that the CFP is open
+        LocalDate now = LocalDate.now();
+        if (now.isBefore(submissionContext.cfpOpenDate())) {
+            throw new IllegalArgumentException("CFP is not open yet");
+        }else if(now.isAfter(submissionContext.cfpCloseDate())) {
+            throw new IllegalArgumentException("CFP is closed");
+        }
+        //
         var conferenceSession = new ConferenceSession();
         conferenceSession.id = java.util.UUID.randomUUID();
         conferenceSession.title = title;

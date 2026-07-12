@@ -3,8 +3,10 @@ package io.arrogantprogrammer.quarkusinsights.cfp.application;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 
 public record CreateConferenceSessionCommand(
+        UUID cfpId,
         String title,
         String description,
         ConferenceSessionFormat conferenceSessionFormat,
@@ -17,6 +19,7 @@ public record CreateConferenceSessionCommand(
         String preRequisiteKnowledge) {
 
     public CreateConferenceSessionCommand {
+        Objects.requireNonNull(cfpId, "cfpId is required");
         Objects.requireNonNull(title, "title is required");
         Objects.requireNonNull(description, "description is required");
         Objects.requireNonNull(conferenceSessionFormat, "format is required");

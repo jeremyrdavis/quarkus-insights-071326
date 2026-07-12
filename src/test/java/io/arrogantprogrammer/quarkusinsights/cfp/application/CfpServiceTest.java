@@ -23,7 +23,7 @@ public class CfpServiceTest {
         EmailAddress email = new EmailAddress("test@example.com");
         ProgrammingLanguage java = new ProgrammingLanguage("Java");
         ConferenceSessionFormat conferenceSessionFormat = new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session", Duration.ofMinutes(50));
-        ConferenceTrack conferenceTrack = new ConferenceTrack(TrackCode.ARCHITECTURE, "Architecture", "Architecture track");
+        ConferenceTrack conferenceTrack = new ConferenceTrack("ARCHITECTURE", "Architecture", "Architecture track");
 
         CreateConferenceSessionCommand command = new CreateConferenceSessionCommand(
                 "Quarkus Insights",
@@ -35,7 +35,7 @@ public class CfpServiceTest {
                 email,
                 "1. Intro, 2. Demo, 3. Q&A",
                 List.of(java),
-                "Basic Java knowledge");
+                "Basic Java knowledge", );
 
         ConferenceSessionDTO result = cfpService.createConferenceSession(command);
 

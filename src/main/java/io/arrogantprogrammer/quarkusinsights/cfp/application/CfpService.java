@@ -12,7 +12,9 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @ApplicationScoped
@@ -59,10 +61,27 @@ public class CfpService {
         presenterRepository.delete("email", email);
     }
 
+    public Optional<CfpDTO> getCfp(UUID id) {
+        return cfpRepository.findByUUID(id).map(CfpMapper::toDTO);
+    }
+
+    public List<CfpDTO> getAllCfps() {
+        return cfpRepository.findAllCfps().stream().map(CfpMapper::toDTO).toList();
+    }
+
+    @Transactional
+    public Optional<CfpDTO> updateCfp(UUID id, UpdateCfpCommand command) {
+        return cfpRepository.updateCfp(id, command).map(CfpMapper::toDTO);
+    }
+
+    @Transactional
+    public boolean deleteCfp(UUID id) {
+        return cfpRepository.deleteCfp(id);
+    }
+
     @Transactional
     public CfpDTO createCfp(CreateCfpCommand command) {
         Log.debugf("createCfp: {}", command);
-        SubmissionContext submissionContext = submissionProposalService.getSubmissionContext(command.cfpId(), null);
         Cfp cfp = Cfp.create(
                 command.cfpOpens(),
                 command.cfpCloses(),
@@ -79,8 +98,9 @@ public class CfpService {
     @Transactional
     public ConferenceSessionDTO createConferenceSession(CreateConferenceSessionCommand command) {
         Log.debugf("createConferenceSession: {}", command);
-
+        SubmissionContext submissionContext = submissionProposalService.getSubmissionContext(command.cfpId(), null);
         ConferenceSession conferenceSession = ConferenceSession.create(
+                submissionContext,
                 command.title(),
                 command.description(),
                 command.conferenceSessionFormat(),

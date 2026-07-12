@@ -19,17 +19,17 @@ public class CreateConferenceSessionCommandTest {
         ConferenceTrack conferenceTrack = new ConferenceTrack(TrackCode.ARCHITECTURE, "Architecture", "Architecture track");
 
         // Test null values (Objects.requireNonNull throws NullPointerException)
-        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand(null, "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", List.of(java), null));
-        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", null, conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", List.of(java), null));
-        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", null, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", List.of(java), null));
-        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, null, Level.BEGINNER, Language.ENGLISH, email, "outline", List.of(java), null));
-        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, null, Language.ENGLISH, email, "outline", List.of(java), null));
-        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, null, email, "outline", List.of(java), null));
-        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, null, "outline", List.of(java), null));
-        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, null, List.of(java), null));
-        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", null, null));
+        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand(null, "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", List.of(java), null, ));
+        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", null, conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", List.of(java), null, ));
+        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", null, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", List.of(java), null, ));
+        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, null, Level.BEGINNER, Language.ENGLISH, email, "outline", List.of(java), null, ));
+        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, null, Language.ENGLISH, email, "outline", List.of(java), null, ));
+        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, null, email, "outline", List.of(java), null, ));
+        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, null, "outline", List.of(java), null, ));
+        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, null, List.of(java), null, ));
+        assertThrows(NullPointerException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", null, null, ));
 
         // Test empty programming languages (throws IllegalArgumentException)
-        assertThrows(IllegalArgumentException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", Collections.emptyList(), null));
+        assertThrows(IllegalArgumentException.class, () -> new CreateConferenceSessionCommand("title", "desc", conferenceSessionFormat, conferenceTrack, Level.BEGINNER, Language.ENGLISH, email, "outline", Collections.emptyList(), null, ));
     }
 }
