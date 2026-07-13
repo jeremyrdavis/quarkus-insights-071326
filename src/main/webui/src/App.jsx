@@ -5,6 +5,7 @@ import CfpCreatePage from './pages/cfp/CfpCreatePage.jsx'
 import CfpDetailPage from './pages/cfp/CfpDetailPage.jsx'
 import CfpEditPage from './pages/cfp/CfpEditPage.jsx'
 import WizardPage from './pages/wizard/WizardPage.jsx'
+import ReviewsPage from './pages/reviews/ReviewsPage.jsx'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/cfp/:id" element={<CfpDetailPage />} />
         <Route path="/cfp/:id/edit" element={<CfpEditPage />} />
         <Route path="/submit" element={<WizardPage />} />
+        <Route path="/reviews" element={<ReviewsPage />} />
         <Route path="*" element={<Navigate to="/cfp" replace />} />
       </Route>
     </Routes>

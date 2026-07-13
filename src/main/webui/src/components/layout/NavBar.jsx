@@ -12,6 +12,7 @@ export default function NavBar() {
         <span className="text-white font-bold text-lg mr-4">CFP Manager</span>
         <NavLink to="/cfp" className={linkClass}>CFPs</NavLink>
         <NavLink to="/submit" className={linkClass}>Submit Proposal</NavLink>
+        <NavLink to="/reviews" className={linkClass}>Reviews</NavLink>
       </div>
     </nav>
   )
