@@ -78,6 +78,7 @@ public class SessionProposalMapperTest {
                 List.of());
 
         return SessionProposal.create(
+                java.util.UUID.randomUUID(),
                 context,
                 "Mapping Sessions",
                 "Abstract",

@@ -2,15 +2,17 @@ package io.arrogantprogrammer.quarkusinsights.cfp.persistence;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceSessionFormat;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ConferenceTrack;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.FormatCode;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.FormatCode;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.ProgrammingLanguage;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,9 +25,31 @@ public class SessionProposalRepository implements PanacheRepository<SessionPropo
                 .collect(Collectors.toList());
     }
 
+    public Optional<SessionProposal> findById(UUID id) {
+        return find("id", id).<SessionProposalEntity>firstResultOptional()
+                .map(this::toDomain);
+    }
+
+    public List<SessionProposal> findByCfpId(UUID cfpId) {
+        return list("cfpId", cfpId).stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public SessionProposal save(SessionProposal proposal) {
+        SessionProposalEntity entity = find("id", proposal.getId()).<SessionProposalEntity>firstResult();
+        if (entity == null) {
+            throw new jakarta.ws.rs.NotFoundException("SessionProposal not found: " + proposal.getId());
+        }
+        entity.setStatus(proposal.getStatus());
+        return toDomain(entity);
+    }
+
     private SessionProposal toDomain(SessionProposalEntity entity) {
         return new SessionProposal(
                 entity.getId(),
+                entity.getCfpId(),
                 entity.getTitle(),
                 entity.getDescription(),
                 new ConferenceSessionFormat(
@@ -39,7 +63,7 @@ public class SessionProposalRepository implements PanacheRepository<SessionPropo
                         entity.getTrack().getDescription()),
                 entity.getLevel(),
                 entity.getLanguage(),
-                new Presenter(
+                entity.getPresenter() == null ? null : new Presenter(
                         entity.getPresenter().getId(),
                         new EmailAddress(entity.getPresenter().getEmail()),
                         entity.getPresenter().getFirstName(),
@@ -48,7 +72,8 @@ public class SessionProposalRepository implements PanacheRepository<SessionPropo
                 entity.getPresentationOutline(),
                 entity.getProgrammingLanguagesUsed().stream()
                         .map(ProgrammingLanguage::new)
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                entity.getStatus()
         );
     }
 }

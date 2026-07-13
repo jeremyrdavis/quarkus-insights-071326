@@ -2,14 +2,17 @@ package io.arrogantprogrammer.quarkusinsights.cfp.application;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.SubmissionContext;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.events.SessionProposalReviewedEvent;
 import io.arrogantprogrammer.quarkusinsights.cfp.infrastructure.PresenterParameters;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.*;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +33,9 @@ public class CfpApplicationService {
 
     @Inject
     SubmissionProposalApplicationService submissionProposalApplicationService;
+
+    @Inject
+    Event<SessionProposalReviewedEvent> reviewedEvent;
 
     @Transactional
     public PresenterDTO registerPresenter(CreatePresenterCommand command){
@@ -99,6 +105,7 @@ public class CfpApplicationService {
         Log.debugf("createSessionProposal: {}", command);
         SubmissionContext submissionContext = submissionProposalApplicationService.getSubmissionContext(command.cfpId(), null);
         SessionProposal sessionProposal = SessionProposal.create(
+                command.cfpId(),
                 submissionContext,
                 command.title(),
                 command.description(),
@@ -118,5 +125,20 @@ public class CfpApplicationService {
         Log.debugf("persisted : {}", sessionProposalEntity);
 
         return SessionProposalMapper.toDTO(sessionProposal);
+    }
+
+    public List<SessionProposalDTO> getSessionProposalsForCfp(UUID cfpId) {
+        return sessionProposalRepository.findByCfpId(cfpId)
+                .stream().map(SessionProposalMapper::toDTO).toList();
+    }
+
+    @Transactional
+    public SessionProposalDTO reviewSessionProposal(ReviewSessionProposalCommand command) {
+        SessionProposal proposal = sessionProposalRepository.findById(command.proposalId())
+                .orElseThrow(() -> new NotFoundException("SessionProposal not found: " + command.proposalId()));
+        SessionProposalReviewedEvent event = proposal.review(command.newStatus());
+        sessionProposalRepository.save(proposal);
+        reviewedEvent.fire(event);
+        return SessionProposalMapper.toDTO(proposal);
     }
 }

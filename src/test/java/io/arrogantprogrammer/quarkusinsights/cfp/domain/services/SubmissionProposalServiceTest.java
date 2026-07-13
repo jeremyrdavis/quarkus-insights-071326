@@ -81,6 +81,7 @@ public class SubmissionProposalServiceTest {
                 "Doe");
         SessionProposal sessionProposal = new SessionProposal(
                 UUID.randomUUID(),
+                UUID.randomUUID(),
                 "Getting Started with Quarkus",
                 "An introduction to building supersonic, subatomic Java applications",
                 TECHNICAL_SESSION_FORMAT,
@@ -90,7 +91,8 @@ public class SubmissionProposalServiceTest {
                 presenter,
                 "Basic Java knowledge",
                 "Intro, live coding, Q&A",
-                List.of(new ProgrammingLanguage("Java")));
+                List.of(new ProgrammingLanguage("Java")),
+                io.arrogantprogrammer.quarkusinsights.cfp.domain.SessionProposalStatus.SUBMITTED);
         when(sessionProposalRepository.findSessionProposalsByPresenterId(PRESENTER_ID))
                 .thenReturn(List.of(sessionProposal));
     }

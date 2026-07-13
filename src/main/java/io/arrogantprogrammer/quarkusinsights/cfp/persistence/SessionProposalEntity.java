@@ -2,17 +2,21 @@ package io.arrogantprogrammer.quarkusinsights.cfp.persistence;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.Language;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.Level;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.SessionProposalStatus;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "session_proposal")
 public class SessionProposalEntity {
 
     @Id
-    private java.util.UUID id;
+    private UUID id;
+
+    private UUID cfpId;
 
     private String title;
 
@@ -47,11 +51,15 @@ public class SessionProposalEntity {
     @Column(name = "programming_language")
     private List<String> programmingLanguagesUsed = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private SessionProposalStatus status;
+
     public SessionProposalEntity() {
     }
 
-    public SessionProposalEntity(java.util.UUID id, String title, String description, FormatEntity format, TrackEntity track, Level level, Language language, PresenterEntity presenter, String preRequisiteKnowledge, String presentationOutline, List<String> programmingLanguagesUsed) {
+    public SessionProposalEntity(UUID id, UUID cfpId, String title, String description, FormatEntity format, TrackEntity track, Level level, Language language, PresenterEntity presenter, String preRequisiteKnowledge, String presentationOutline, List<String> programmingLanguagesUsed, SessionProposalStatus status) {
         this.id = id;
+        this.cfpId = cfpId;
         this.title = title;
         this.description = description;
         this.format = format;
@@ -62,10 +70,15 @@ public class SessionProposalEntity {
         this.preRequisiteKnowledge = preRequisiteKnowledge;
         this.presentationOutline = presentationOutline;
         this.programmingLanguagesUsed = programmingLanguagesUsed;
+        this.status = status;
     }
 
-    public java.util.UUID getId() {
+    public UUID getId() {
         return id;
+    }
+
+    public UUID getCfpId() {
+        return cfpId;
     }
 
     public String getTitle() {
@@ -106,5 +119,13 @@ public class SessionProposalEntity {
 
     public List<String> getProgrammingLanguagesUsed() {
         return programmingLanguagesUsed;
+    }
+
+    public SessionProposalStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(SessionProposalStatus status) {
+        this.status = status;
     }
 }

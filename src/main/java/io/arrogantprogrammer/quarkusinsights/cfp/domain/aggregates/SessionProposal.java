@@ -1,39 +1,35 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.events.SessionProposalReviewedEvent;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Objects;
+import java.util.UUID;
 
 public class SessionProposal {
 
-    private java.util.UUID id;
-
+    private UUID id;
+    private UUID cfpId;
     private String title;
-
     private String description;
-
     private ConferenceSessionFormat conferenceSessionFormat;
-
     private ConferenceTrack conferenceTrack;
-
     private Level level;
-
     private Language language;
-
     private Presenter presenter;
-
     private String preRequisiteKnowledge;
-
     private String presentationOutline;
-
     private Collection<ProgrammingLanguage> programmingLanguagesUsed;
+    private SessionProposalStatus status;
 
     public SessionProposal() {
     }
 
-    public SessionProposal(java.util.UUID id, String title, String description, ConferenceSessionFormat conferenceSessionFormat, ConferenceTrack conferenceTrack, Level level, Language language, Presenter presenter, String preRequisiteKnowledge, String presentationOutline, Collection<ProgrammingLanguage> programmingLanguagesUsed) {
+    public SessionProposal(UUID id, UUID cfpId, String title, String description, ConferenceSessionFormat conferenceSessionFormat, ConferenceTrack conferenceTrack, Level level, Language language, Presenter presenter, String preRequisiteKnowledge, String presentationOutline, Collection<ProgrammingLanguage> programmingLanguagesUsed, SessionProposalStatus status) {
         this.id = id;
+        this.cfpId = cfpId;
         this.title = title;
         this.description = description;
         this.conferenceSessionFormat = conferenceSessionFormat;
@@ -44,9 +40,11 @@ public class SessionProposal {
         this.preRequisiteKnowledge = preRequisiteKnowledge;
         this.presentationOutline = presentationOutline;
         this.programmingLanguagesUsed = programmingLanguagesUsed;
+        this.status = status;
     }
 
     public static SessionProposal create(
+            UUID cfpId,
             SubmissionContext submissionContext,
             String title,
             String description,
@@ -65,7 +63,8 @@ public class SessionProposal {
             throw new IllegalArgumentException("CFP is closed");
         }
         var sessionProposal = new SessionProposal();
-        sessionProposal.id = java.util.UUID.randomUUID();
+        sessionProposal.id = UUID.randomUUID();
+        sessionProposal.cfpId = cfpId;
         sessionProposal.title = title;
         sessionProposal.description = description;
         sessionProposal.conferenceSessionFormat = conferenceSessionFormat;
@@ -76,11 +75,29 @@ public class SessionProposal {
         sessionProposal.preRequisiteKnowledge = preRequisiteKnowledge;
         sessionProposal.presentationOutline = presentationOutline;
         sessionProposal.programmingLanguagesUsed = programmingLanguagesUsed;
+        sessionProposal.status = SessionProposalStatus.SUBMITTED;
         return sessionProposal;
     }
 
-    public java.util.UUID getId() {
+    public SessionProposalReviewedEvent review(SessionProposalStatus newStatus) {
+        Objects.requireNonNull(newStatus, "newStatus is required");
+        if (newStatus == this.status) {
+            throw new IllegalArgumentException("Proposal is already " + newStatus.displayValue);
+        }
+        SessionProposalStatus previous = this.status;
+        this.status = newStatus;
+        return new SessionProposalReviewedEvent(
+                id, cfpId, title,
+                presenter != null ? presenter.getEmail() : null,
+                previous, newStatus);
+    }
+
+    public UUID getId() {
         return id;
+    }
+
+    public UUID getCfpId() {
+        return cfpId;
     }
 
     public String getTitle() {
@@ -121,5 +138,9 @@ public class SessionProposal {
 
     public Collection<ProgrammingLanguage> getProgrammingLanguagesUsed() {
         return programmingLanguagesUsed;
+    }
+
+    public SessionProposalStatus getStatus() {
+        return status;
     }
 }
