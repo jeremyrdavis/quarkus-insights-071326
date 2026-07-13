@@ -6,7 +6,7 @@ import io.arrogantprogrammer.quarkusinsights.shared.domain.DomainEvent;
 
 import java.util.UUID;
 
-public record SessionProposalReviewedEvent(
+public record SessionProposalStatusChangedEvent(
         UUID proposalId,
         UUID cfpId,
         String proposalTitle,

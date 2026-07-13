@@ -2,7 +2,7 @@ package io.arrogantprogrammer.quarkusinsights.cfp.infrastructure;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpApplicationService;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CreateSessionProposalCommand;
-import io.arrogantprogrammer.quarkusinsights.cfp.application.ReviewSessionProposalCommand;
+import io.arrogantprogrammer.quarkusinsights.cfp.application.ChangeSessionProposalStatusCommand;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.SessionProposalDTO;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import io.quarkus.logging.Log;
@@ -55,6 +55,6 @@ public class SessionProposalResource {
     public SessionProposalDTO reviewSessionProposal(
             @PathParam("id") UUID id,
             @Valid ReviewSessionProposalParameters params) {
-        return cfpService.reviewSessionProposal(new ReviewSessionProposalCommand(id, params.status));
+        return cfpService.reviewSessionProposal(new ChangeSessionProposalStatusCommand(id, params.status));
     }
 }

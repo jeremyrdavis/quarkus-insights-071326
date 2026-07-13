@@ -4,7 +4,7 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.SubmissionContext;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.events.SessionProposalReviewedEvent;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.events.SessionProposalStatusChangedEvent;
 import io.arrogantprogrammer.quarkusinsights.cfp.infrastructure.PresenterParameters;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.*;
 import io.quarkus.logging.Log;
@@ -35,7 +35,7 @@ public class CfpApplicationService {
     SubmissionProposalApplicationService submissionProposalApplicationService;
 
     @Inject
-    Event<SessionProposalReviewedEvent> reviewedEvent;
+    Event<SessionProposalStatusChangedEvent> reviewedEvent;
 
     @Transactional
     public PresenterDTO registerPresenter(CreatePresenterCommand command){
@@ -133,10 +133,10 @@ public class CfpApplicationService {
     }
 
     @Transactional
-    public SessionProposalDTO reviewSessionProposal(ReviewSessionProposalCommand command) {
+    public SessionProposalDTO reviewSessionProposal(ChangeSessionProposalStatusCommand command) {
         SessionProposal proposal = sessionProposalRepository.findById(command.proposalId())
                 .orElseThrow(() -> new NotFoundException("SessionProposal not found: " + command.proposalId()));
-        SessionProposalReviewedEvent event = proposal.review(command.newStatus());
+        SessionProposalStatusChangedEvent event = proposal.review(command.newStatus());
         sessionProposalRepository.save(proposal);
         reviewedEvent.fire(event);
         return SessionProposalMapper.toDTO(proposal);

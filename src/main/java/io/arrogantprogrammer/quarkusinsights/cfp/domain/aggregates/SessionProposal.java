@@ -1,7 +1,7 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.events.SessionProposalReviewedEvent;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.events.SessionProposalStatusChangedEvent;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -79,14 +79,14 @@ public class SessionProposal {
         return sessionProposal;
     }
 
-    public SessionProposalReviewedEvent review(SessionProposalStatus newStatus) {
+    public SessionProposalStatusChangedEvent review(SessionProposalStatus newStatus) {
         Objects.requireNonNull(newStatus, "newStatus is required");
         if (newStatus == this.status) {
             throw new IllegalArgumentException("Proposal is already " + newStatus.displayValue);
         }
         SessionProposalStatus previous = this.status;
         this.status = newStatus;
-        return new SessionProposalReviewedEvent(
+        return new SessionProposalStatusChangedEvent(
                 id, cfpId, title,
                 presenter != null ? presenter.getEmail() : null,
                 previous, newStatus);
