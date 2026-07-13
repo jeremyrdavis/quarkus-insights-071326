@@ -2,11 +2,6 @@ import { useFieldArray } from 'react-hook-form'
 import Button from '../ui/Button.jsx'
 import FormField, { inputClass } from '../ui/FormField.jsx'
 
-const FORMAT_CODES = [
-  'TECHNICAL_SESSION', 'HANDS_ON_LAB', 'UNCONFERENCE',
-  'KEYNOTE', 'BYTE_SIZE', 'IGNITE', 'PRE_CONFERENCE_WORKSHOP',
-]
-
 export default function FormatEditor({ control, register, errors }) {
   const { fields, append, remove } = useFieldArray({ control, name: 'formats' })
 
@@ -27,17 +22,9 @@ export default function FormatEditor({ control, register, errors }) {
       )}
       {fields.map((field, i) => (
         <div key={field.id} className="grid grid-cols-12 gap-2 p-3 bg-gray-50 rounded-md border border-gray-200">
-          <div className="col-span-3">
-            <FormField label="Code" error={errors?.formats?.[i]?.formatCode?.message}>
-              <select
-                className={inputClass(!!errors?.formats?.[i]?.formatCode)}
-                {...register(`formats.${i}.formatCode`, { required: 'Required' })}
-              >
-                {FORMAT_CODES.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </FormField>
-          </div>
-          <div className="col-span-3">
+          {/* formatCode is preserved but not user-editable */}
+          <input type="hidden" {...register(`formats.${i}.formatCode`)} />
+          <div className="col-span-4">
             <FormField label="Title" error={errors?.formats?.[i]?.title?.message}>
               <input
                 className={inputClass(!!errors?.formats?.[i]?.title)}
@@ -54,7 +41,7 @@ export default function FormatEditor({ control, register, errors }) {
               />
             </FormField>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-4">
             <FormField label="Description">
               <input className={inputClass(false)} {...register(`formats.${i}.description`)} />
             </FormField>

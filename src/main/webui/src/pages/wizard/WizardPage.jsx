@@ -171,6 +171,7 @@ export default function WizardPage() {
 
           {step === 1 && (
             <Step1Presenter
+              cfpId={cfpId}
               initial={wizardData.presenter}
               onNext={handlePresenterNext}
             />

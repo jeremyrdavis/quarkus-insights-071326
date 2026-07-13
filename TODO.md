@@ -1,25 +1,15 @@
 # TODO
 
-## io.arrogantprogrammer.quarkusinsights.cfp.infrastructure
+## UI updates
 
-- [x] Add Jakarta Validation to the PresenterParameters record
-- [x] Add a GET endpoint to retrieve a presenter by email
-- [x] Add a PUT endpoint to update a presenter by email
-- [x] Add a DELETE endpoint to remove a presenter by email
+### Submit Proposal
+- [x] Change the SessionProposal wizards so that it captures first and last name of the presenter and email on the first step.  The email validation should occur in the background and only display if the user has already submitted a talk for that conference
+- [x] Remove the FormatCode from the display on the 2nd step
+### CFP
+- [x] Remove the FormatCode from the display on the 2nd step
+- [x] Remove the FormatCode from the edit fields
+- [x] Display the duration in minutes
 
-## io.arrogantprogrammer.quarkusinsights.cfp.domain
-
-- [x] Add a BuilderMethod to the Submitter class with email, firstName, and lastName parameters
-
-## general
-- Add UUIDs to created objects, return a 201 Created response with the location of the created object
-
-## validation
-- Validity check for emails: a domain service that calls the PresenterRepository to see if an email already exists
--- where to check if email already exists? A: Domain Service
-
-## Review Functionality
-Add a status field to Cfp with values, SUBMITTED, APPROVED, REJECTED, WAITLISTED;
-Add Events for changes in the status field of Cfp objects.
-Publish the events with CDI Events
-The Communication subdomain should pick up the events and send emails to the presenters using Quarkus Mailer
+### Review
+- [x] Only the conference title should be displayed
+- [x] The PresntationProposals cards should open a wizard that displays the SessionProposal's the title, description, format, track, duration, programming languages, presenter, prerequisite knowledge, outline, programming languages used, and current status, and the buttons for approve, decline, and waitlist

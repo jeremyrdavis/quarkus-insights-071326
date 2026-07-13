@@ -3,6 +3,7 @@ import { useCfp } from '../../hooks/useCfp.js'
 import Button from '../../components/ui/Button.jsx'
 import FormField, { inputClass } from '../../components/ui/FormField.jsx'
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx'
+import { formatDuration } from '../../utils/duration.js'
 
 const LEVELS = ['BEGINNER', 'INTERMEDIATE', 'ADVANCED']
 const LANGUAGES = ['ENGLISH', 'DUTCH']
@@ -78,7 +79,7 @@ export default function Step2Session({ cfpId, initial, onNext, onBack }) {
             {...register('formatIndex', { required: true })}
           >
             {cfp?.conferenceSessionFormats?.map((f, i) => (
-              <option key={i} value={i}>{f.title} ({f.formatCode})</option>
+              <option key={i} value={i}>{f.title} ({formatDuration(f.duration)})</option>
             ))}
           </select>
         </FormField>

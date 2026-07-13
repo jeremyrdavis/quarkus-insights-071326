@@ -1,5 +1,6 @@
 import Button from '../../components/ui/Button.jsx'
 import ErrorAlert from '../../components/ui/ErrorAlert.jsx'
+import { formatDuration } from '../../utils/duration.js'
 
 function Row({ label, value }) {
   return (
@@ -35,7 +36,7 @@ export default function Step3Verify({ wizardData, onBack, onSubmit, submitting, 
         <dl className="bg-white rounded-md border border-gray-200 px-4 divide-y divide-gray-100">
           <Row label="Title" value={session.title} />
           <Row label="Abstract" value={session.description} />
-          <Row label="Format" value={`${session.conferenceSessionFormat.title} (${session.conferenceSessionFormat.formatCode})`} />
+          <Row label="Format" value={`${session.conferenceSessionFormat.title} (${formatDuration(session.conferenceSessionFormat.duration)})`} />
           <Row label="Track" value={session.conferenceTrack.title || session.conferenceTrack.trackCode} />
           <Row label="Level" value={session.level} />
           <Row label="Language" value={session.language} />

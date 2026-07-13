@@ -7,6 +7,8 @@ import { sessionProposalApi } from '../../api/sessionProposalApi.js'
 import Button from '../../components/ui/Button.jsx'
 import LoadingSpinner from '../../components/ui/LoadingSpinner.jsx'
 import ErrorAlert from '../../components/ui/ErrorAlert.jsx'
+import ProposalReviewModal from '../../components/cfp/ProposalReviewModal.jsx'
+import { formatDuration } from '../../utils/duration.js'
 
 const STATUS_STYLES = {
   SUBMITTED:  'bg-gray-100 text-gray-700',
@@ -14,12 +16,6 @@ const STATUS_STYLES = {
   DECLINED:   'bg-red-100 text-red-700',
   WAITLISTED: 'bg-yellow-100 text-yellow-800',
 }
-
-const REVIEW_ACTIONS = [
-  { status: 'APPROVED',   label: 'Approve',   variant: 'primary' },
-  { status: 'WAITLISTED', label: 'Waitlist',  variant: 'secondary' },
-  { status: 'DECLINED',   label: 'Decline',   variant: 'danger' },
-]
 
 function Row({ label, value }) {
   return (
@@ -35,19 +31,18 @@ function isOpen(cfp) {
   return today >= cfp.cfpOpens && today <= cfp.cfpCloses
 }
 
-function ProposalRow({ proposal, onReview }) {
-  const [confirming, setConfirming] = useState(null)
-
+function ProposalCard({ proposal, onOpen }) {
   return (
-    <div className="border border-gray-200 rounded-md p-4 space-y-3">
+    <button
+      type="button"
+      onClick={() => onOpen(proposal)}
+      className="w-full text-left border border-gray-200 rounded-md p-4 hover:shadow-md hover:border-indigo-200 transition"
+    >
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-sm font-medium text-gray-900 truncate">{proposal.title}</p>
           <p className="text-xs text-gray-500 mt-0.5">
-            {proposal.presenter
-              ? `${proposal.presenter.firstName} ${proposal.presenter.lastName}`
-              : proposal.presenterEmail}
-            {' · '}{proposal.conferenceTrack?.title || proposal.conferenceTrack?.trackCode}
+            {proposal.conferenceTrack?.title || proposal.conferenceTrack?.trackCode}
             {' · '}{proposal.conferenceSessionFormat?.title}
           </p>
         </div>
@@ -55,32 +50,7 @@ function ProposalRow({ proposal, onReview }) {
           {proposal.status}
         </span>
       </div>
-
-      {confirming ? (
-        <div className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm">
-          <span className="text-gray-700">
-            Mark as <strong>{confirming}</strong>?
-          </span>
-          <div className="flex gap-2">
-            <Button variant="secondary" onClick={() => setConfirming(null)}>Cancel</Button>
-            <Button
-              variant={confirming === 'DECLINED' ? 'danger' : 'primary'}
-              onClick={() => { onReview(proposal.id, confirming); setConfirming(null) }}
-            >
-              Confirm
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <div className="flex gap-2">
-          {REVIEW_ACTIONS.filter(a => a.status !== proposal.status).map(({ status, label, variant }) => (
-            <Button key={status} variant={variant} onClick={() => setConfirming(status)}>
-              {label}
-            </Button>
-          ))}
-        </div>
-      )}
-    </div>
+    </button>
   )
 }
 
@@ -92,7 +62,9 @@ export default function CfpDetailPage() {
   const [deleting, setDeleting] = useState(false)
   const [deleteError, setDeleteError] = useState(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [selectedProposal, setSelectedProposal] = useState(null)
   const [reviewError, setReviewError] = useState(null)
+  const [reviewSubmitting, setReviewSubmitting] = useState(false)
 
   async function handleDelete() {
     setDeleting(true)
@@ -107,13 +79,22 @@ export default function CfpDetailPage() {
     }
   }
 
+  function openProposal(proposal) {
+    setReviewError(null)
+    setSelectedProposal(proposal)
+  }
+
   async function handleReview(proposalId, status) {
     setReviewError(null)
+    setReviewSubmitting(true)
     try {
       await sessionProposalApi.review(proposalId, status)
+      setSelectedProposal(null)
       reloadProposals()
     } catch (e) {
       setReviewError(e.message)
+    } finally {
+      setReviewSubmitting(false)
     }
   }
 
@@ -171,9 +152,8 @@ export default function CfpDetailPage() {
             : <div className="space-y-2">
                 {cfp.conferenceSessionFormats?.map((f, i) => (
                   <div key={i} className="flex items-center gap-3 text-sm">
-                    <span className="font-mono text-xs bg-gray-100 px-2 py-0.5 rounded">{f.formatCode}</span>
                     <span className="font-medium">{f.title}</span>
-                    <span className="text-gray-400">{f.duration}</span>
+                    <span className="text-gray-400">{formatDuration(f.duration)}</span>
                     {f.description && <span className="text-gray-500">— {f.description}</span>}
                   </div>
                 ))}
@@ -200,7 +180,6 @@ export default function CfpDetailPage() {
             Session Proposals
             {proposals.length > 0 && <span className="ml-2 text-xs font-normal text-gray-400">({proposals.length})</span>}
           </h2>
-          {reviewError && <div className="mb-3"><ErrorAlert message={reviewError} onDismiss={() => setReviewError(null)} /></div>}
           {proposalsLoading && <LoadingSpinner message="Loading proposals…" />}
           {proposalsError && <ErrorAlert message={proposalsError} />}
           {!proposalsLoading && !proposalsError && proposals.length === 0 && (
@@ -209,12 +188,22 @@ export default function CfpDetailPage() {
           {proposals.length > 0 && (
             <div className="space-y-3">
               {proposals.map(p => (
-                <ProposalRow key={p.id} proposal={p} onReview={handleReview} />
+                <ProposalCard key={p.id} proposal={p} onOpen={openProposal} />
               ))}
             </div>
           )}
         </div>
       </div>
+
+      {selectedProposal && (
+        <ProposalReviewModal
+          proposal={selectedProposal}
+          onClose={() => setSelectedProposal(null)}
+          onReview={handleReview}
+          reviewError={reviewError}
+          submitting={reviewSubmitting}
+        />
+      )}
     </div>
   )
 }
