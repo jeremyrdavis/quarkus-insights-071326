@@ -97,8 +97,8 @@ export default function Step1Presenter({ cfpId, initial, onNext }) {
   return (
     <form onSubmit={handleSubmit(proceed)} className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-gray-900">Step 1: Presenter</h2>
-        <p className="text-sm text-gray-500 mt-1">Tell us who you are.</p>
+        <h2 className="font-display font-semibold text-[18px] text-white">Step 1: Presenter</h2>
+        <p className="text-sm text-muted-400 mt-1">Tell us who you are.</p>
       </div>
 
       {apiError && <ErrorAlert message={apiError} onDismiss={() => setApiError(null)} />}
@@ -130,8 +130,8 @@ export default function Step1Presenter({ cfpId, initial, onNext }) {
       </FormField>
 
       {alreadySubmitted && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
-          <p className="text-sm text-yellow-800">
+        <div className="bg-warning/10 border border-warning/30 rounded-[10px] p-3">
+          <p className="text-sm text-warning">
             You have already submitted a talk for this conference. You can still submit another.
           </p>
         </div>

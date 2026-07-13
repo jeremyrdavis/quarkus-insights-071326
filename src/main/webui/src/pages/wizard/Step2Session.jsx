@@ -49,10 +49,10 @@ export default function Step2Session({ cfpId, initial, onNext, onBack }) {
   return (
     <form onSubmit={handleSubmit(submit)} className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-gray-900">Step 2: Session Details</h2>
+        <h2 className="font-display font-semibold text-[18px] text-white">Step 2: Session Details</h2>
         {cfp && (
-          <p className="text-sm text-gray-500 mt-1">
-            Submitting to <strong>{cfp.conferenceName}</strong> · CFP closes {cfp.cfpCloses}
+          <p className="text-sm text-muted-400 mt-1">
+            Submitting to <strong className="text-muted-100">{cfp.conferenceName}</strong> · CFP closes {cfp.cfpCloses}
           </p>
         )}
       </div>

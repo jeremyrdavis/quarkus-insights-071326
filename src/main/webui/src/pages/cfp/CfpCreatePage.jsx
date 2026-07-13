@@ -25,11 +25,11 @@ export default function CfpCreatePage() {
   return (
     <div>
       <div className="mb-6">
-        <Link to="/cfp" className="text-sm text-indigo-600 hover:underline">← Back to CFPs</Link>
-        <h1 className="text-2xl font-bold text-gray-900 mt-2">Create CFP</h1>
+        <Link to="/cfp" className="font-mono text-[12px] uppercase tracking-[.1em] text-brand-light">← Back to CFPs</Link>
+        <h1 className="font-display font-extrabold text-[32px] tracking-[-.02em] text-white mt-3">Create CFP</h1>
       </div>
       {error && <div className="mb-4"><ErrorAlert message={error} onDismiss={() => setError(null)} /></div>}
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="card">
         <CfpForm onSubmit={handleSubmit} isSubmitting={submitting} />
       </div>
     </div>

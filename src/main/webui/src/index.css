@@ -1,3 +1,105 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+  }
+  body {
+    @apply bg-ink text-white font-sans antialiased;
+  }
+  a {
+    @apply text-brand-light no-underline;
+  }
+  a:hover {
+    color: #a9cffb;
+  }
+}
+
+@layer components {
+  .container-1180 {
+    @apply mx-auto max-w-container px-8;
+  }
+
+  /* Buttons */
+  .btn-base {
+    @apply inline-flex items-center justify-center gap-2 rounded-[10px] font-display font-semibold
+      transition-colors focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn-base bg-brand text-white shadow-btn hover:bg-[#5aa2ee] px-5 h-11 text-[14.5px];
+  }
+  .btn-ghost {
+    @apply btn-base border border-white/20 text-[#e4ecf4] hover:bg-white/5 px-5 h-11 text-[14.5px];
+  }
+  .btn-danger {
+    @apply btn-base border border-danger/40 bg-danger/10 text-danger-light hover:bg-danger/20 px-5 h-11 text-[14.5px];
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-2xl border border-white/[.08] bg-surface p-6;
+  }
+  .card-accent {
+    @apply rounded-2xl border border-brand/40 bg-surface p-6 shadow-card;
+  }
+
+  /* Form fields */
+  .fld {
+    @apply block w-full rounded-[10px] border border-white/[.08] bg-surface-2 px-4 py-3 text-[15px]
+      text-white placeholder-muted-500 font-sans
+      focus:outline-none focus:border-brand/60 focus:ring-1 focus:ring-brand/40;
+  }
+  .fld-error {
+    @apply border-danger/50 focus:border-danger/70 focus:ring-danger/40;
+  }
+  .lbl {
+    @apply block mb-1.5 font-mono text-[11px] uppercase tracking-[.06em] text-muted-500;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center gap-1.5 h-[26px] px-3 rounded-full font-mono text-[11.5px]
+      font-semibold uppercase tracking-[.08em];
+  }
+  .badge-open,
+  .badge-approved {
+    @apply badge bg-[rgba(34,198,126,.15)] text-success;
+  }
+  .badge-closed,
+  .badge-submitted {
+    @apply badge bg-white/[.06] text-muted-300;
+  }
+  .badge-declined {
+    @apply badge bg-danger/[.12] text-danger-light border border-danger/40;
+  }
+  .badge-waitlisted {
+    @apply badge bg-[rgba(255,183,3,.16)] text-warning;
+  }
+
+  /* Track / tag pills */
+  .track-tag {
+    @apply inline-flex items-center rounded-md border border-brand/30 bg-brand/[.15]
+      px-2 py-1 font-mono text-[11px] text-brand-tag;
+  }
+
+  /* Nav links */
+  .nav-link {
+    @apply font-mono text-[12.5px] uppercase tracking-[.1em] text-muted-300 hover:text-white transition-colors;
+  }
+  .nav-link-active {
+    @apply text-white;
+  }
+
+  /* Section kicker */
+  .kicker {
+    @apply font-mono text-[12px] uppercase tracking-[.2em] text-brand-light;
+  }
+
+  /* Stat box (reviews) */
+  .stat-box {
+    @apply flex-1 rounded-[11px] border border-white/[.07] bg-surface-2 p-3.5;
+  }
+}

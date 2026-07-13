@@ -21,14 +21,14 @@ function StepIndicator({ step }) {
           const active = step === n
           return (
             <li key={label} className="flex items-center gap-2">
-              {i > 0 && <div className="h-px w-8 bg-gray-300" />}
+              {i > 0 && <div className="h-px w-8 bg-white/[.18]" />}
               <span className={[
-                'inline-flex items-center gap-1.5 text-sm font-medium',
-                done ? 'text-indigo-600' : active ? 'text-indigo-700' : 'text-gray-400',
+                'inline-flex items-center gap-1.5 text-sm font-display font-medium',
+                done ? 'text-brand-light' : active ? 'text-white' : 'text-muted-500',
               ].join(' ')}>
                 <span className={[
                   'inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold',
-                  done ? 'bg-indigo-600 text-white' : active ? 'ring-2 ring-indigo-600 text-indigo-700' : 'bg-gray-200 text-gray-500',
+                  done ? 'bg-brand text-white' : active ? 'ring-2 ring-brand text-white' : 'bg-white/10 text-muted-400',
                 ].join(' ')}>
                   {done ? '✓' : n}
                 </span>
@@ -120,23 +120,24 @@ export default function WizardPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Submit a Session Proposal</h1>
+        <div className="kicker mb-2">Call for Papers</div>
+        <h1 className="font-display font-extrabold text-[32px] tracking-[-.02em] text-white">Submit a Session Proposal</h1>
       </div>
 
       {step === 0 && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
+        <div className="card space-y-6">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">Select a CFP</h2>
-            <p className="text-sm text-gray-500 mt-1">Choose the conference you are submitting to.</p>
+            <h2 className="font-display font-semibold text-[18px] text-white">Select a CFP</h2>
+            <p className="text-sm text-muted-400 mt-1">Choose the conference you are submitting to.</p>
           </div>
 
           {cfps.length === 0 ? (
-            <p className="text-sm text-gray-500">No open CFPs found.</p>
+            <p className="text-sm text-muted-400">No open CFPs found.</p>
           ) : (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Conference <span className="text-red-500">*</span>
+                <label className="lbl">
+                  Conference <span className="text-danger-light">*</span>
                 </label>
                 <select
                   value={cfpId}
@@ -152,11 +153,7 @@ export default function WizardPage() {
                 </select>
               </div>
               <div className="flex justify-end">
-                <button
-                  onClick={startWizard}
-                  disabled={!cfpId}
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button onClick={startWizard} disabled={!cfpId} className="btn-primary">
                   Start Submission →
                 </button>
               </div>
@@ -166,7 +163,7 @@ export default function WizardPage() {
       )}
 
       {step >= 1 && step <= 3 && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="card">
           <StepIndicator step={step} />
 
           {step === 1 && (
@@ -199,7 +196,7 @@ export default function WizardPage() {
       )}
 
       {step === 4 && (
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="card">
           <Step4Confirmation wizardData={wizardData} onReset={handleReset} />
         </div>
       )}

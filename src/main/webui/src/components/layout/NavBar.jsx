@@ -1,18 +1,25 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 
 export default function NavBar() {
-  const linkClass = ({ isActive }) =>
-    `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-      isActive ? 'bg-indigo-700 text-white' : 'text-indigo-100 hover:bg-indigo-600'
-    }`
+  const linkClass = ({ isActive }) => `nav-link ${isActive ? 'nav-link-active' : ''}`
 
   return (
-    <nav className="bg-indigo-800 shadow">
-      <div className="max-w-5xl mx-auto px-4 flex items-center gap-4 h-14">
-        <span className="text-white font-bold text-lg mr-4">CFP Manager</span>
-        <NavLink to="/cfp" className={linkClass}>CFPs</NavLink>
-        <NavLink to="/submit" className={linkClass}>Submit Proposal</NavLink>
-        <NavLink to="/reviews" className={linkClass}>Reviews</NavLink>
+    <nav className="border-b border-white/[.08] bg-[rgba(10,20,32,.7)] backdrop-blur">
+      <div className="container-1180 flex items-center justify-between h-[82px]">
+        <Link to="/" className="flex items-center gap-[13px]">
+          <img src="/quarkus-icon.svg" alt="Quarkus" className="w-[34px] h-[34px] block" />
+          <span className="font-display font-extrabold text-[21px] tracking-[-.01em] text-white">
+            Quarkus <span className="text-brand-light">CFP</span>
+          </span>
+        </Link>
+
+        <div className="hidden md:flex items-center gap-9">
+          <NavLink to="/" end className={linkClass}>Call for Papers</NavLink>
+          <NavLink to="/submit" className={linkClass}>Submit</NavLink>
+          <NavLink to="/reviews" className={linkClass}>Reviews</NavLink>
+        </div>
+
+        <Link to="/submit" className="btn-primary">Submit a talk →</Link>
       </div>
     </nav>
   )

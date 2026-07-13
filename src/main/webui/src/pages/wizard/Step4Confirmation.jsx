@@ -6,32 +6,32 @@ export default function Step4Confirmation({ wizardData, onReset }) {
 
   return (
     <div className="text-center space-y-6 py-8">
-      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100">
-        <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-success/15">
+        <svg className="w-8 h-8 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
         </svg>
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Proposal Submitted!</h2>
-        <p className="text-gray-500 mt-2">
-          <strong>{session.title}</strong> has been submitted for {presenter.firstName} {presenter.lastName}.
+        <h2 className="font-display font-extrabold text-[26px] text-white">Proposal Submitted!</h2>
+        <p className="text-muted-300 mt-2">
+          <strong className="text-muted-100">{session.title}</strong> has been submitted for {presenter.firstName} {presenter.lastName}.
         </p>
       </div>
 
-      <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 text-sm text-left max-w-md mx-auto">
+      <div className="bg-surface-2 rounded-[10px] border border-white/[.08] p-4 text-sm text-left max-w-md mx-auto">
         <dl className="space-y-2">
           <div className="flex justify-between">
-            <dt className="text-gray-500">Format</dt>
-            <dd className="font-medium">{session.conferenceSessionFormat.title}</dd>
+            <dt className="text-muted-500">Format</dt>
+            <dd className="font-medium text-white">{session.conferenceSessionFormat.title}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-gray-500">Track</dt>
-            <dd className="font-medium">{session.conferenceTrack.title || session.conferenceTrack.trackCode}</dd>
+            <dt className="text-muted-500">Track</dt>
+            <dd className="font-medium text-white">{session.conferenceTrack.title || session.conferenceTrack.trackCode}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-gray-500">Level</dt>
-            <dd className="font-medium">{session.level}</dd>
+            <dt className="text-muted-500">Level</dt>
+            <dd className="font-medium text-white">{session.level}</dd>
           </div>
         </dl>
       </div>

@@ -4,9 +4,9 @@ import { formatDuration } from '../../utils/duration.js'
 
 function Row({ label, value }) {
   return (
-    <div className="py-2 sm:grid sm:grid-cols-3 sm:gap-4 border-b border-gray-100 last:border-0">
-      <dt className="text-sm font-medium text-gray-500">{label}</dt>
-      <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{value ?? '—'}</dd>
+    <div className="py-2.5 sm:grid sm:grid-cols-3 sm:gap-4 border-b border-white/[.06] last:border-0">
+      <dt className="text-sm font-medium text-muted-500">{label}</dt>
+      <dd className="mt-1 text-sm text-muted-100 sm:col-span-2 sm:mt-0 whitespace-pre-wrap">{value ?? '—'}</dd>
     </div>
   )
 }
@@ -17,23 +17,23 @@ export default function Step3Verify({ wizardData, onBack, onSubmit, submitting, 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-semibold text-gray-900">Step 3: Review Your Submission</h2>
-        <p className="text-sm text-gray-500 mt-1">Check everything below, then click Submit to send your proposal.</p>
+        <h2 className="font-display font-semibold text-[18px] text-white">Step 3: Review Your Submission</h2>
+        <p className="text-sm text-muted-400 mt-1">Check everything below, then click Submit to send your proposal.</p>
       </div>
 
       {submitError && <ErrorAlert message={submitError} />}
 
       <section>
-        <h3 className="text-sm font-semibold text-indigo-700 uppercase tracking-wide mb-2">Presenter</h3>
-        <dl className="bg-white rounded-md border border-gray-200 px-4 divide-y divide-gray-100">
+        <h3 className="font-mono text-[11px] font-semibold text-brand-light uppercase tracking-[.1em] mb-2">Presenter</h3>
+        <dl className="bg-surface-2 rounded-[10px] border border-white/[.08] px-4">
           <Row label="Name" value={`${presenter.firstName} ${presenter.lastName}`} />
           <Row label="Email" value={presenter.email} />
         </dl>
       </section>
 
       <section>
-        <h3 className="text-sm font-semibold text-indigo-700 uppercase tracking-wide mb-2">Session</h3>
-        <dl className="bg-white rounded-md border border-gray-200 px-4 divide-y divide-gray-100">
+        <h3 className="font-mono text-[11px] font-semibold text-brand-light uppercase tracking-[.1em] mb-2">Session</h3>
+        <dl className="bg-surface-2 rounded-[10px] border border-white/[.08] px-4">
           <Row label="Title" value={session.title} />
           <Row label="Abstract" value={session.description} />
           <Row label="Format" value={`${session.conferenceSessionFormat.title} (${formatDuration(session.conferenceSessionFormat.duration)})`} />

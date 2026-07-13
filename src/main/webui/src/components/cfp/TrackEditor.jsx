@@ -8,7 +8,7 @@ export default function TrackEditor({ control, register, errors }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-gray-700">Tracks</h3>
+        <h3 className="font-display font-semibold text-[15px] text-white">Tracks</h3>
         <Button
           type="button"
           variant="secondary"
@@ -18,10 +18,10 @@ export default function TrackEditor({ control, register, errors }) {
         </Button>
       </div>
       {fields.length === 0 && (
-        <p className="text-sm text-gray-400 italic">No tracks added yet.</p>
+        <p className="text-sm text-muted-500 italic">No tracks added yet.</p>
       )}
       {fields.map((field, i) => (
-        <div key={field.id} className="grid grid-cols-12 gap-2 p-3 bg-gray-50 rounded-md border border-gray-200">
+        <div key={field.id} className="grid grid-cols-12 gap-2 p-3 bg-surface-2 rounded-[10px] border border-white/[.08]">
           <div className="col-span-4">
             <FormField label="Track Code" error={errors?.conferenceTracks?.[i]?.trackCode?.message}>
               <input
