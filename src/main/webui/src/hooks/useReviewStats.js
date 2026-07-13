@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { sessionProposalApi } from '../api/sessionProposalApi.js'
 
 // Given a list of CFPs, fetches each CFP's proposals and returns a map
-// { [cfpId]: { total, pending, approved } }. Pending = SUBMITTED, Approved = APPROVED.
+// { [cfpId]: { total, pending, approved } }. Pending = SUBMITTED, Approved = ACCEPTED.
 export function useReviewStats(cfps) {
   const [statsById, setStatsById] = useState({})
   const [loading, setLoading] = useState(false)
@@ -23,7 +23,7 @@ export function useReviewStats(cfps) {
           return [cfp.id, {
             total: proposals.length,
             pending: proposals.filter(p => p.status === 'SUBMITTED').length,
-            approved: proposals.filter(p => p.status === 'APPROVED').length,
+            approved: proposals.filter(p => p.status === 'ACCEPTED').length,
           }]
         } catch {
           return [cfp.id, { total: 0, pending: 0, approved: 0 }]

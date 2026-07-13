@@ -34,7 +34,19 @@ This is a **Quarkus 3.x + Java 25** application implementing **DDD with a hexago
 ### Bounded Contexts
 
 - **`cfp`** — the primary context: conference proposals, sessions, presenters, tracks, and formats
+- **`communications`** — owns outbound messaging policy: turns published CFP events into durable `Communication` records and retryable email deliveries
 - **`conference`** — nascent second context; cross-context access only via public `domain` APIs
+
+### Durable acceptance-communications flow (CFP → Communications)
+
+Accepting a session proposal emails the presenter via a durable, at-least-once pipeline (see `session-proposal-accepted-communications-spec.md`):
+
+1. `CfpApplicationService.reviewSessionProposal(ACCEPTED)` calls `SessionProposal.accept()` and, **in the same transaction**, appends a `SessionProposalAcceptedEvent` (a `shared.domain.PublishedEvent`) to the `cfp_outbox_event` table. No CDI event is fired here.
+2. `CfpOutboxScheduler` (Quarkus `@Scheduled`, `SKIP`) drains due rows via `CfpOutbox*ApplicationService`. Each row publishes in a `REQUIRES_NEW` transaction that fires a **synchronous** typed `Event<SessionProposalAcceptedEvent>` and marks the row `PUBLISHED`.
+3. `communications` `SessionProposalEventListener` observes it synchronously (`@Observes`, no tx phase) and `CommunicationsApplicationService.recordAcceptedProposal(...)` (default `@Transactional`, so it **joins** the publisher's transaction) idempotently creates one `Communication` + `EMAIL` delivery, keyed by `source_event_id` (unique constraint). The insert and the outbox `PUBLISHED` update commit together; an observer failure rolls the publication back.
+4. `CommunicationDeliveryScheduler` claims pending deliveries (`REQUIRES_NEW`), sends via the `EmailSender` port / `QuarkusEmailSender` (Quarkus Mailer) **outside any transaction**, then records `DELIVERED` / `RETRY_SCHEDULED` / `PERMANENTLY_FAILED` in separate `REQUIRES_NEW` transactions.
+
+Semantics: **at-least-once** email — a crash after SMTP accepts but before the DB records success may re-send. `REQUIRES_NEW` state methods live on a separate bean from the non-transactional batch orchestrators (no self-invocation). Communications may depend on `cfp` **only** through `cfp.domain.events`.
 
 ### Layer Structure (within each bounded context)
 

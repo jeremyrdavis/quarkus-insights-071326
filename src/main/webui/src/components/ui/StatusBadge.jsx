@@ -2,12 +2,12 @@ const CLASS_BY_STATUS = {
   OPEN:       'badge-open',
   CLOSED:     'badge-closed',
   SUBMITTED:  'badge-submitted',
-  APPROVED:   'badge-approved',
+  ACCEPTED:   'badge-accepted',
   DECLINED:   'badge-declined',
   WAITLISTED: 'badge-waitlisted',
 }
 
-// Renders a proposal status (SUBMITTED/APPROVED/DECLINED/WAITLISTED) or a
+// Renders a proposal status (SUBMITTED/ACCEPTED/DECLINED/WAITLISTED) or a
 // CFP open/closed state as a themed pill. Open gets a pulsing dot.
 export default function StatusBadge({ status, label }) {
   const key = String(status ?? '').toUpperCase()

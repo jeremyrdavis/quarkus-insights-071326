@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static io.arrogantprogrammer.quarkusinsights.cfp.application.SessionProposalMapper.toEntity;
+
 @ApplicationScoped
 public class SessionProposalRepository implements PanacheRepository<SessionProposalEntity> {
 
@@ -34,6 +36,21 @@ public class SessionProposalRepository implements PanacheRepository<SessionPropo
         return list("cfpId", cfpId).stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public SessionProposal create(SessionProposal sessionProposal){
+        SessionProposalEntity entity = toEntity(sessionProposal);
+        // Associate the already-persisted (managed) presenter rather than the
+        // transient copy built by toEntity(); otherwise the ManyToOne cascade
+        // tries to re-persist a presenter that already exists, which fails with
+        // a NonUniqueObject/EntityExists error on the shared identifier.
+        Presenter presenter = sessionProposal.getPresenter();
+        if (presenter != null) {
+            entity.setPresenter(getEntityManager().find(PresenterEntity.class, presenter.getId()));
+        }
+        persist(entity);
+        return toDomain(entity);
     }
 
     @Transactional
@@ -76,4 +93,40 @@ public class SessionProposalRepository implements PanacheRepository<SessionPropo
                 entity.getStatus()
         );
     }
+
+    public static SessionProposalEntity toEntity(SessionProposal sessionProposal) {
+        return new SessionProposalEntity(
+                sessionProposal.getId(),
+                sessionProposal.getCfpId(),
+                sessionProposal.getTitle(),
+                sessionProposal.getDescription(),
+                new FormatEntity(
+                        sessionProposal.getFormat().formatCode().name(),
+                        sessionProposal.getFormat().title(),
+                        sessionProposal.getFormat().description(),
+                        sessionProposal.getFormat().duration()
+                ),
+                new TrackEntity(
+                        sessionProposal.getTrack().trackCode(),
+                        sessionProposal.getTrack().title(),
+                        sessionProposal.getTrack().description()
+                ),
+                sessionProposal.getLevel(),
+                sessionProposal.getLanguage(),
+                sessionProposal.getPresenter() == null ? null : new PresenterEntity(
+                        sessionProposal.getPresenter().getId(),
+                        sessionProposal.getPresenter().getEmail().address(),
+                        sessionProposal.getPresenter().getFirstName(),
+                        sessionProposal.getPresenter().getLastName()
+                ),
+                sessionProposal.getPreRequisiteKnowledge(),
+                sessionProposal.getPresentationOutline(),
+                sessionProposal.getProgrammingLanguagesUsed() == null ? null :
+                        sessionProposal.getProgrammingLanguagesUsed().stream()
+                        .map(pl -> pl.language())
+                        .collect(Collectors.toList()),
+                sessionProposal.getStatus()
+        );
+    }
+
 }

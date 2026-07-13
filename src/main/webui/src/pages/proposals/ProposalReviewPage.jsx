@@ -64,7 +64,7 @@ export default function ProposalReviewPage() {
   const presenterEmail = presenter?.emailAddress?.address
   const languages = proposal.programmingLanguagesUsed?.map(p => p.language).join(', ')
   const actions = [
-    { status: 'APPROVED', label: 'Approve', cls: 'btn-primary w-full' },
+    { status: 'ACCEPTED', label: 'Accept', cls: 'btn-primary w-full' },
     { status: 'WAITLISTED', label: 'Waitlist', cls: 'btn-ghost flex-1' },
     { status: 'DECLINED', label: 'Decline', cls: 'btn-danger flex-1' },
   ]
@@ -121,14 +121,14 @@ export default function ProposalReviewPage() {
             <textarea className="fld mb-4" rows={3} placeholder="Reviewer notes (optional)…" />
             <div className="flex flex-col gap-2.5">
               {actions.filter(a => a.status !== proposal.status).map(a => (
-                a.status === 'APPROVED' ? (
+                a.status === 'ACCEPTED' ? (
                   <button key={a.status} className={a.cls} disabled={submitting} onClick={() => review(a.status)}>
                     {submitting ? 'Saving…' : a.label}
                   </button>
                 ) : null
               ))}
               <div className="flex gap-2.5">
-                {actions.filter(a => a.status !== proposal.status && a.status !== 'APPROVED').map(a => (
+                {actions.filter(a => a.status !== proposal.status && a.status !== 'ACCEPTED').map(a => (
                   <button key={a.status} className={a.cls} disabled={submitting} onClick={() => review(a.status)}>
                     {a.label}
                   </button>

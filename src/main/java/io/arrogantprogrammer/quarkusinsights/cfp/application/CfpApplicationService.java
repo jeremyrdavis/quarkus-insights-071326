@@ -4,16 +4,17 @@ import io.arrogantprogrammer.quarkusinsights.cfp.domain.SubmissionContext;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Cfp;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.Presenter;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates.SessionProposal;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.events.SessionProposalStatusChangedEvent;
+import io.arrogantprogrammer.quarkusinsights.cfp.domain.events.SessionProposalAcceptedEvent;
 import io.arrogantprogrammer.quarkusinsights.cfp.infrastructure.PresenterParameters;
 import io.arrogantprogrammer.quarkusinsights.cfp.persistence.*;
+import io.arrogantprogrammer.quarkusinsights.cfp.persistence.outbox.CfpOutboxEventRepository;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class CfpApplicationService {
     SubmissionProposalApplicationService submissionProposalApplicationService;
 
     @Inject
-    Event<SessionProposalStatusChangedEvent> reviewedEvent;
+    CfpOutboxEventRepository outboxRepository;
 
     @Transactional
     public PresenterDTO registerPresenter(CreatePresenterCommand command){
@@ -44,19 +45,20 @@ public class CfpApplicationService {
         return PresenterMapper.toDTO(persistedPresenter);
     }
 
-    public PresenterDTO getPresenter(String email) {
-        Optional<PresenterEntity> presenterEntity = presenterRepository.findByEmail(email);
-        return presenterEntity.map(entity -> PresenterMapper.toDTO(presenterRepository.toDomain(entity))).orElse(null);
+    public Optional<PresenterDTO> getPresenter(String email) {
+        Optional<Presenter> presenter = presenterRepository.findByEmail(email);
+        if(presenter.isPresent()){
+            return Optional.of(PresenterMapper.toDTO(presenter.get()));
+        }else {
+            return Optional.empty();
+        }
     }
 
     @Transactional
     public PresenterDTO updatePresenter(String email, PresenterParameters parameters) {
-        Optional<PresenterEntity> presenterEntityOptional = presenterRepository.findByEmail(email);
-        if (presenterEntityOptional.isPresent()) {
-            PresenterEntity presenterEntity = presenterEntityOptional.get();
-            presenterEntity.setFirstName(parameters.firstName());
-            presenterEntity.setLastName(parameters.lastName());
-            return PresenterMapper.toDTO(presenterRepository.toDomain(presenterEntity));
+        Optional<Presenter> presenter = presenterRepository.findByEmail(email);
+        if (presenter.isPresent()) {
+            return PresenterMapper.toDTO(presenter.get());
         }
         return null;
     }
@@ -104,6 +106,11 @@ public class CfpApplicationService {
     public SessionProposalDTO createSessionProposal(CreateSessionProposalCommand command) {
         Log.debugf("createSessionProposal: {}", command);
         SubmissionContext submissionContext = submissionProposalApplicationService.getSubmissionContext(command.cfpId(), null);
+        // Resolve the presenter so the proposal — and any downstream acceptance
+        // event — always carries the presenter identity and email.
+        Presenter presenter = presenterRepository.findByEmail(command.presenterEmail().address())
+                .orElseThrow(() -> new NotFoundException(
+                        "Presenter not found for email: " + command.presenterEmail().address()));
         SessionProposal sessionProposal = SessionProposal.create(
                 command.cfpId(),
                 submissionContext,
@@ -113,16 +120,15 @@ public class CfpApplicationService {
                 command.conferenceTrack(),
                 command.level(),
                 command.language(),
-                null,
+                presenter,
                 command.preRequisiteKnowledge(),
                 command.presentationOutline(),
                 command.programmingLanguagesUsed());
         Log.debugf("createSessionProposal: {}", sessionProposal);
 
-        SessionProposalEntity sessionProposalEntity = SessionProposalMapper.toEntity(sessionProposal);
-        Log.debugf("persisting : {}", sessionProposalEntity);
-        sessionProposalRepository.persist(sessionProposalEntity);
-        Log.debugf("persisted : {}", sessionProposalEntity);
+        Log.debugf("persisting : {}", sessionProposal);
+        sessionProposalRepository.create(sessionProposal);
+        Log.debugf("persisted : {}", sessionProposal);
 
         return SessionProposalMapper.toDTO(sessionProposal);
     }
@@ -132,13 +138,48 @@ public class CfpApplicationService {
                 .stream().map(SessionProposalMapper::toDTO).toList();
     }
 
+    /**
+     * Review a proposal. Acceptance is the only status change that produces a
+     * published event: the aggregate update and the outbox insert commit
+     * together (or roll back together). No CDI event is fired here — the outbox
+     * publisher does that asynchronously and durably.
+     */
     @Transactional
     public SessionProposalDTO reviewSessionProposal(ChangeSessionProposalStatusCommand command) {
         SessionProposal proposal = sessionProposalRepository.findById(command.proposalId())
                 .orElseThrow(() -> new NotFoundException("SessionProposal not found: " + command.proposalId()));
-        SessionProposalStatusChangedEvent event = proposal.review(command.newStatus());
+        switch (command.newStatus()) {
+            case ACCEPTED -> acceptAndAppendOutbox(proposal);
+            case DECLINED -> proposal.decline();
+            case WAITLISTED -> proposal.waitlist();
+            case SUBMITTED -> throw new IllegalArgumentException(
+                    "Cannot change a proposal back to SUBMITTED");
+        }
         sessionProposalRepository.save(proposal);
-        reviewedEvent.fire(event);
         return SessionProposalMapper.toDTO(proposal);
+    }
+
+    private void acceptAndAppendOutbox(SessionProposal proposal) {
+        proposal.accept();
+        Presenter presenter = proposal.getPresenter();
+        if (presenter == null) {
+            throw new IllegalStateException(
+                    "Accepted proposal " + proposal.getId() + " has no presenter");
+        }
+        Instant occurredAt = Instant.now();
+        SessionProposalAcceptedEvent event = new SessionProposalAcceptedEvent(
+                UUID.randomUUID(),
+                occurredAt,
+                SessionProposalAcceptedEvent.CURRENT_VERSION,
+                proposal.getId(),
+                proposal.getCfpId(),
+                proposal.getTitle(),
+                presenter.getId(),
+                presenter.getFirstName(),
+                presenter.getLastName(),
+                presenter.getEmail().address());
+        outboxRepository.append(event);
+        Log.infof("Accepted proposal %s; appended outbox event %s (type %s)",
+                proposal.getId(), event.eventId(), SessionProposalAcceptedEvent.EVENT_TYPE);
     }
 }

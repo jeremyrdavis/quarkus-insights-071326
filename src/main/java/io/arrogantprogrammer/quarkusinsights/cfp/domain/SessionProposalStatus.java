@@ -2,7 +2,7 @@ package io.arrogantprogrammer.quarkusinsights.cfp.domain;
 
 public enum SessionProposalStatus {
     SUBMITTED("Submitted"),
-    APPROVED("Approved"),
+    ACCEPTED("Accepted"),
     DECLINED("Declined"),
     WAITLISTED("Waitlisted");
 

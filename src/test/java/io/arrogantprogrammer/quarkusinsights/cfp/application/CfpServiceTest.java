@@ -23,7 +23,11 @@ public class CfpServiceTest {
     public void testCreateSessionProposal() {
         // CFP 44444444 is open Jul–Sep 2026; use it so SessionProposal.create() doesn't reject the submission
         UUID cfpId = UUID.fromString("44444444-4444-4444-4444-444444444444");
-        EmailAddress email = new EmailAddress("test@example.com");
+        // Distinct email so this proposal's presenter FK does not collide with
+        // presenter CRUD tests that share the same database.
+        EmailAddress email = new EmailAddress("session-presenter@example.com");
+        // The presenter must exist before a proposal can be created for them.
+        cfpService.registerPresenter(new CreatePresenterCommand(email, "Test", "Presenter"));
         ProgrammingLanguage java = new ProgrammingLanguage("Java");
         ConferenceSessionFormat conferenceSessionFormat = new ConferenceSessionFormat(FormatCode.TECHNICAL_SESSION, "Technical Session", "A technical session", Duration.ofMinutes(50));
         ConferenceTrack conferenceTrack = new ConferenceTrack("ARCHITECTURE", "Architecture", "Architecture track");

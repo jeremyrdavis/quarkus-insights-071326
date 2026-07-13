@@ -11,8 +11,12 @@ import java.util.Optional;
 @ApplicationScoped
 public class PresenterRepository implements PanacheRepository<PresenterEntity> {
 
-    public Optional<PresenterEntity> findByEmail(String email) {
-        return find("email", email).firstResultOptional();
+    public Optional<Presenter> findByEmail(String email) {
+        Optional<PresenterEntity> presenterEntity = find("email", email).firstResultOptional();
+        if (presenterEntity.isPresent()) {
+            return Optional.of(toDomain(presenterEntity.get()));
+        }
+        return Optional.empty();
     }
 
     @Transactional

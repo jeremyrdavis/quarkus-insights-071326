@@ -1,11 +1,9 @@
 package io.arrogantprogrammer.quarkusinsights.cfp.domain.aggregates;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.*;
-import io.arrogantprogrammer.quarkusinsights.cfp.domain.events.SessionProposalStatusChangedEvent;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.UUID;
 
 public class SessionProposal {
@@ -79,17 +77,24 @@ public class SessionProposal {
         return sessionProposal;
     }
 
-    public SessionProposalStatusChangedEvent review(SessionProposalStatus newStatus) {
-        Objects.requireNonNull(newStatus, "newStatus is required");
-        if (newStatus == this.status) {
-            throw new IllegalArgumentException("Proposal is already " + newStatus.displayValue);
+    /**
+     * Accept this proposal. Idempotency is intentionally rejected: accepting an
+     * already-accepted proposal is a programming/usage error and would otherwise
+     * cause a duplicate acceptance event to be published.
+     */
+    public void accept() {
+        if (this.status == SessionProposalStatus.ACCEPTED) {
+            throw new IllegalStateException("Proposal is already accepted");
         }
-        SessionProposalStatus previous = this.status;
-        this.status = newStatus;
-        return new SessionProposalStatusChangedEvent(
-                id, cfpId, title,
-                presenter != null ? presenter.getEmail() : null,
-                previous, newStatus);
+        this.status = SessionProposalStatus.ACCEPTED;
+    }
+
+    public void decline() {
+        this.status = SessionProposalStatus.DECLINED;
+    }
+
+    public void waitlist() {
+        this.status = SessionProposalStatus.WAITLISTED;
     }
 
     public UUID getId() {

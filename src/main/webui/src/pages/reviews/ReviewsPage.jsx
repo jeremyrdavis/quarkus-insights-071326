@@ -58,7 +58,7 @@ export default function ReviewsPage() {
               <div className="flex gap-2.5">
                 <StatBox value={stats.total} label="Proposals" />
                 <StatBox value={stats.pending} label="Pending" accent="pending" />
-                <StatBox value={stats.approved} label="Approved" accent="approved" />
+                <StatBox value={stats.approved} label="Accepted" accent="approved" />
               </div>
 
               <div className="mt-5 text-right">

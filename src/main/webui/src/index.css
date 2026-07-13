@@ -65,7 +65,7 @@
       font-semibold uppercase tracking-[.08em];
   }
   .badge-open,
-  .badge-approved {
+  .badge-accepted {
     @apply badge bg-[rgba(34,198,126,.15)] text-success;
   }
   .badge-closed,

@@ -80,6 +80,24 @@ Easily start your REST Web Services
 ## Invariants (Business Rules)
 - Presenters can submit a maximum of 4 sessions
 
+## Durable acceptance communications
+
+Accepting a session proposal notifies the presenter by email through a durable event pipeline
+(full spec: `session-proposal-accepted-communications-spec.md`):
+
+- **CFP outbox** — accepting a proposal writes the aggregate change *and* a `SessionProposalAcceptedEvent`
+  row in the `cfp_outbox_event` table in one transaction. Nothing is emailed inline.
+- **Synchronous CDI handoff** — a scheduled publisher drains the outbox and fires the event *synchronously*.
+  The `communications` context observes it and records the message in the **same transaction** that marks the
+  outbox row `PUBLISHED`; if recording fails, the publication rolls back and is retried.
+- **Communications idempotency** — the `communications` record is keyed by the source event ID (unique
+  constraint), so a re-published event never creates a second message or a duplicate delivery.
+- **Separate email-delivery scheduler** — a second scheduler claims pending deliveries and calls SMTP
+  *outside* any database transaction, then records `DELIVERED`, `RETRY_SCHEDULED`, or `PERMANENTLY_FAILED`.
+  Email failures retry independently of the CFP proposal/outbox state.
+- **At-least-once, not exactly-once** — external email delivery is **at least once**. A crash after SMTP
+  accepts a message but before the database records success may cause a **duplicate email**.
+
 ## Listening
 
 I built most of this project on a car trip listening to the following albums:

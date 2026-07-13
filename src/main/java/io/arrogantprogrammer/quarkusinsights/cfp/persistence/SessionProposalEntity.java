@@ -109,6 +109,10 @@ public class SessionProposalEntity {
         return presenter;
     }
 
+    public void setPresenter(PresenterEntity presenter) {
+        this.presenter = presenter;
+    }
+
     public String getPreRequisiteKnowledge() {
         return preRequisiteKnowledge;
     }

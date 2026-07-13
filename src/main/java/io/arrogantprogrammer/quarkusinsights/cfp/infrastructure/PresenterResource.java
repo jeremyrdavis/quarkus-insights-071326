@@ -2,6 +2,7 @@ package io.arrogantprogrammer.quarkusinsights.cfp.infrastructure;
 
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CfpApplicationService;
 import io.arrogantprogrammer.quarkusinsights.cfp.application.CreatePresenterCommand;
+import io.arrogantprogrammer.quarkusinsights.cfp.application.PresenterDTO;
 import io.arrogantprogrammer.quarkusinsights.cfp.domain.EmailAddress;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.Optional;
 
 @Path("/presenters")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -38,11 +40,11 @@ public class PresenterResource {
     @GET
     @Path("/{email}")
     public Response getPresenter(@PathParam("email") String email) {
-        var submitterDTO = cfpService.getPresenter(email);
-        if (submitterDTO == null) {
+        Optional<PresenterDTO> submitterDTO = cfpService.getPresenter(email);
+        if (submitterDTO.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok().entity(submitterDTO).build();
+        return Response.ok().entity(submitterDTO.get()).build();
     }
 
     @PUT
