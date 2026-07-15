@@ -101,3 +101,13 @@ Breaking any of these is a build failure — check them first when refactoring.
 - Seed data is in `src/main/resources/import.sql` (one default CFP, 5 formats, 8 tracks)
 - `Duration` values are stored as nanoseconds (Java `Duration` serialization)
 - Enum columns use `STRING` strategy (`@Enumerated(EnumType.STRING)`)
+
+## Code Review
+
+When performing a code review in this repo (e.g. via `/code-review`), also apply
+the **DDD conformance checklist** in [`docs/ddd-review-checklist.md`](docs/ddd-review-checklist.md)
+as an advisory lens — in addition to the standard correctness/quality review, not
+in place of it. The ArchUnit suite ([`docs/archunit-rules.md`](docs/archunit-rules.md))
+remains the hard, build-blocking gate; the checklist covers the semantic DDD
+concerns ArchUnit cannot express (anemic aggregates, misplaced logic,
+aggregate-boundary and ubiquitous-language issues).
